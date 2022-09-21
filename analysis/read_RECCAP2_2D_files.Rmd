@@ -285,28 +285,23 @@ for (i_model in models) {
         summarise(!!sym(i_variable) := weighted.mean(x = !!sym(i_variable),
                                                      w = area)) %>% 
         ungroup()
-      
-      print(
-        variable_data_tibble_biome_average %>%
-          mutate(year = as.factor(year)) %>%
-          ggplot(aes(month, !!sym(i_variable), col = year)) +
-          geom_path() +
-          scale_color_viridis_d() +
-          labs(title = i_model) +
-          facet_wrap( ~ biome)
-      )
+
       
       if (i_variable == "fgco2") {
         fgco2_reg <-
           variable_data_tibble %>%
           select(-c(lon, lat)) %>%
-          mutate(fgco2 = fgco2 * area) %>%
+          mutate(fgco2 = -fgco2 * area) %>%
           group_by(year, month, biome) %>%
           summarise(fgco2_reg := sum(fgco2)) %>%
           ungroup()
         
         fgco2_reg <- fgco2_reg %>% 
-          mutate(fgco2_reg = fgco2_reg * (365.25 * 24 * 60 * 60 * 12.011))
+          mutate(fgco2_reg = fgco2_reg * (365.25 * 24 * 60 * 60 * 12.011 * 1e-15))
+        
+        variable_data_tibble_biome_average <-
+          variable_data_tibble_biome_average %>% 
+          mutate(fgco2 = -fgco2 * (365.25 * 24 * 60 * 60))
         
         variable_data_tibble_biome_average <-
           left_join(variable_data_tibble_biome_average,
@@ -324,6 +319,17 @@ for (i_model in models) {
         )
         
       }
+      
+            
+      print(
+        variable_data_tibble_biome_average %>%
+          mutate(year = as.factor(year)) %>%
+          ggplot(aes(month, !!sym(i_variable), col = year)) +
+          geom_path() +
+          scale_color_viridis_d() +
+          labs(title = i_model) +
+          facet_wrap( ~ biome)
+      )
       
       
       if (exists("biome_model_ID")) {
