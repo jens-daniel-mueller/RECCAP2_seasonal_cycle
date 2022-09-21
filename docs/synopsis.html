@@ -393,7 +393,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Synopsis</h1>
 <h4 class="author">Jens Daniel Müller</h4>
-<h4 class="date">21 September, 2022</h4>
+<h4 class="date">22 September, 2022</h4>
 
 </div>
 
@@ -418,7 +418,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-09-21
+<strong>Last updated:</strong> 2022-09-22
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -509,16 +509,16 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreeb9dd62575fb1d93c0407bf0e0f37efb4cfa07cb3targetblankb9dd625a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/b9dd62575fb1d93c0407bf0e0f37efb4cfa07cb3" target="_blank">b9dd625</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree48e937c43375856bf829bfa767eaf7e594543094targetblank48e937ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/48e937c43375856bf829bfa767eaf7e594543094" target="_blank">48e937c</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreeb9dd62575fb1d93c0407bf0e0f37efb4cfa07cb3targetblankb9dd625a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree48e937c43375856bf829bfa767eaf7e594543094targetblank48e937ca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/b9dd62575fb1d93c0407bf0e0f37efb4cfa07cb3" target="_blank">b9dd625</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/48e937c43375856bf829bfa767eaf7e594543094" target="_blank">48e937c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -530,10 +530,6 @@ Ignored files:
 
 Untracked files:
     Untracked:  code/Workflowr_project_managment.R
-
-Unstaged changes:
-    Modified:   analysis/_site.yml
-    Deleted:    analysis/read_RECCAP2_2D_files.Rmd
 
 </code></pre>
 <p>
@@ -577,6 +573,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/48e937c43375856bf829bfa767eaf7e594543094/analysis/synopsis.Rmd" target="_blank">48e937c</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-22
+</td>
+<td>
+plotted time series
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/fd100c2c78fd2bec1d761a227dda925163496eaf/docs/synopsis.html" target="_blank">fd100c2</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/b9dd62575fb1d93c0407bf0e0f37efb4cfa07cb3/analysis/synopsis.Rmd" target="_blank">b9dd625</a>
 </td>
 <td>
@@ -600,13 +630,117 @@ started surface CO2 read-in
   &quot;/nfs/kryo/work/updata/reccap2/&quot;
 
 path_synoptic_datasets &lt;-
-  &quot;/nfs/kryo/work/updata/reccap2/synoptic_datasets/&quot;
+  &quot;/nfs/kryo/work/updata/reccap2/synoptic_datasets/&quot;</code></pre>
+<p>byte open_ocean[lon,lat] (Contiguous storage)<br />
+region_name: 1.Atlantic, 2.Pacific, 3.Indian, 4.Arctic, 5.Southern byte atlantic[lon,lat] (Contiguous storage)<br />
+region_name: 1.NA SPSS, 2.NA STSS, 3.NA STPS, 4.AEQU, 5.SA STPS, 6.MED (not in FM14) byte pacific[lon,lat] (Contiguous storage)<br />
+region_name: 1.NP SPSS, 2.NP STSS, 3.NP STPS, 4.PEQU-W, 5.PEQU-E, 6.SP STPS byte indian[lon,lat] (Contiguous storage)<br />
+region_name: 1.Arabian Sea, 2.Bay of Bengal, 3.Equatorial Indian, 4.Southern Indian byte arctic[lon,lat] (Contiguous storage)<br />
+region_name: 1.ARCTIC ICE (not in FM14), 2.NP ICE, 3.NA ICE, 4.Barents (not in FM14) byte southern[lon,lat] (Contiguous storage)<br />
+region_name: 1.SO STSS, 2.SO SPSS, 3.SO ICE</p>
+<pre class="r"><code>surface_co2 &lt;-
+  read_csv(
+    file = paste(
+      path_synoptic_datasets,
+      &quot;surface_co2_surface_biome_averages&quot;,
+      &quot;.csv&quot;,
+      sep = &quot;&quot;
+    )
+  )
 
-path_cmorized &lt;-
-  &quot;/nfs/kryo/work/updata/reccap2/Models/2D_CO2/&quot;
+surface_co2 &lt;- surface_co2 %&gt;% 
+  filter(model != &quot;NIES-ML3_v20220222&quot;)
 
-path_cmorized_ancillary &lt;-
-  &quot;/nfs/kryo/work/updata/reccap2/Models/Ancillary_data/&quot;</code></pre>
+models &lt;-
+  read_csv(
+    file = paste(
+      path_synoptic_datasets,
+      &quot;models_surface_biome_averages&quot;,
+      &quot;.csv&quot;,
+      sep = &quot;&quot;
+    )
+  )
+
+biome_averages &lt;- bind_rows(
+  surface_co2 %&gt;% mutate(class = &quot;surface_co2&quot;),
+  models %&gt;% mutate(class = &quot;models&quot;)
+)
+
+biome_averages &lt;- biome_averages  %&gt;% 
+  mutate(biome = case_when(
+    biome == &quot;atlantic_1&quot; ~ &quot;NA SPSS&quot;,
+    biome == &quot;atlantic_3&quot; ~ &quot;NA STPS&quot;,
+    biome == &quot;southern_1&quot; ~ &quot;SO STSS&quot;,
+    biome == &quot;southern_2&quot; ~ &quot;SO SPSS&quot;,
+    TRUE ~ &quot;other&quot;
+  )) %&gt;% 
+  filter(biome != &quot;other&quot;)
+
+amplitudes &lt;-
+  biome_averages %&gt;%
+  select(year, month, biome, class, model, fgco2, fgco2_reg, spco2) %&gt;% 
+  pivot_longer(fgco2:spco2,
+               names_to = &quot;parameter&quot;,
+               values_to = &quot;value&quot;) %&gt;% 
+  group_by(class, model, year, biome, parameter) %&gt;%
+  summarise(min = min(value),
+            max = max(value),
+            amplitude = max - min) %&gt;%
+  ungroup()
+
+
+pdf(&quot;output/amplitude_time_series.pdf&quot;,
+    width = 10,
+    height = 10)
+amplitudes %&gt;%
+  group_split(parameter) %&gt;%
+  # head(1) %&gt;% 
+  map(
+    ~ ggplot(data = .x,
+             aes(year, amplitude)) +
+      geom_path(aes(col = model)) +
+      geom_smooth(method = &quot;lm&quot;, col=&quot;black&quot;, se=FALSE) +
+      labs(y = .x$parameter,
+           title = &quot;Seasonal amplitude (annual max - min)&quot;) +
+      scale_color_discrete(name = &quot;product&quot;) +
+      facet_grid(biome ~ class, scales = &quot;free_y&quot;)
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
+<pre><code>
+[[2]]</code></pre>
+<pre><code>
+[[3]]</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>png 
+  2 </code></pre>
+<pre class="r"><code>pdf(&quot;output/min_max_time_series.pdf&quot;,
+    width = 10,
+    height = 10)
+amplitudes %&gt;%
+  select(-amplitude) %&gt;%
+  pivot_longer(min:max,
+               names_to = &quot;extreme&quot;,
+               values_to = &quot;value&quot;) %&gt;%
+  group_split(parameter) %&gt;%
+  # head(1) %&gt;%
+  map(
+    ~ ggplot(data = .x,
+             aes(year, value, linetype = extreme)) +
+      geom_path(aes(col = model)) +
+      geom_smooth(method = &quot;lm&quot;, col = &quot;black&quot;, se = FALSE) +
+      labs(y = .x$parameter,
+           title = &quot;Annual max &amp; min&quot;) +
+      scale_color_discrete(name = &quot;product&quot;) +
+      facet_grid(biome ~ class, scales = &quot;free_y&quot;)
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
+<pre><code>
+[[2]]</code></pre>
+<pre><code>
+[[3]]</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>png 
+  2 </code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -642,25 +776,27 @@ other attached packages:
 [17] tibble_3.1.6     ggplot2_3.3.5    tidyverse_1.3.1  workflowr_1.7.0 
 
 loaded via a namespace (and not attached):
- [1] fs_1.5.2           httr_1.4.2         rprojroot_2.0.2    tools_4.1.2       
- [5] backports_1.4.1    bslib_0.3.1        utf8_1.2.2         R6_2.5.1          
- [9] KernSmooth_2.23-20 DBI_1.1.2          withr_2.4.3        tidyselect_1.1.1  
-[13] processx_3.5.2     compiler_4.1.2     git2r_0.29.0       cli_3.1.1         
-[17] rvest_1.0.2        xml2_1.3.3         sass_0.4.0         scales_1.1.1      
-[21] classInt_0.4-3     callr_3.7.0        SolveSAPHE_2.1.0   proxy_0.4-26      
-[25] digest_0.6.29      rmarkdown_2.11     oce_1.5-0          pkgconfig_2.0.3   
-[29] htmltools_0.5.2    dbplyr_2.1.1       fastmap_1.1.0      rlang_1.0.2       
-[33] readxl_1.3.1       rstudioapi_0.13    jquerylib_0.1.4    generics_0.1.1    
-[37] jsonlite_1.7.3     magrittr_2.0.1     Rcpp_1.0.8         munsell_0.5.0     
-[41] fansi_1.0.2        lifecycle_1.0.1    stringi_1.7.6      whisker_0.4       
-[45] yaml_2.2.1         grid_4.1.2         parallel_4.1.2     promises_1.2.0.1  
-[49] crayon_1.4.2       haven_2.4.3        hms_1.1.1          seacarb_3.3.0     
-[53] knitr_1.37         ps_1.6.0           pillar_1.6.4       reprex_2.0.1      
-[57] glue_1.6.0         evaluate_0.14      getPass_0.2-2      modelr_0.1.8      
-[61] vctrs_0.3.8        tzdb_0.2.0         httpuv_1.6.5       cellranger_1.1.0  
-[65] gtable_0.3.0       assertthat_0.2.1   xfun_0.29          lwgeom_0.2-8      
-[69] broom_0.7.11       e1071_1.7-9        later_1.3.0        class_7.3-20      
-[73] units_0.7-2        ellipsis_0.3.2    </code></pre>
+ [1] nlme_3.1-155       fs_1.5.2           bit64_4.0.5        httr_1.4.2        
+ [5] rprojroot_2.0.2    tools_4.1.2        backports_1.4.1    bslib_0.3.1       
+ [9] utf8_1.2.2         R6_2.5.1           KernSmooth_2.23-20 mgcv_1.8-38       
+[13] DBI_1.1.2          withr_2.4.3        tidyselect_1.1.1   processx_3.5.2    
+[17] bit_4.0.4          compiler_4.1.2     git2r_0.29.0       cli_3.1.1         
+[21] rvest_1.0.2        xml2_1.3.3         labeling_0.4.2     sass_0.4.0        
+[25] scales_1.1.1       classInt_0.4-3     callr_3.7.0        SolveSAPHE_2.1.0  
+[29] proxy_0.4-26       digest_0.6.29      rmarkdown_2.11     oce_1.5-0         
+[33] pkgconfig_2.0.3    htmltools_0.5.2    dbplyr_2.1.1       fastmap_1.1.0     
+[37] rlang_1.0.2        readxl_1.3.1       rstudioapi_0.13    farver_2.1.0      
+[41] jquerylib_0.1.4    generics_0.1.1     jsonlite_1.7.3     vroom_1.5.7       
+[45] magrittr_2.0.1     Matrix_1.4-0       Rcpp_1.0.8         munsell_0.5.0     
+[49] fansi_1.0.2        lifecycle_1.0.1    stringi_1.7.6      whisker_0.4       
+[53] yaml_2.2.1         grid_4.1.2         parallel_4.1.2     promises_1.2.0.1  
+[57] crayon_1.4.2       lattice_0.20-45    splines_4.1.2      haven_2.4.3       
+[61] hms_1.1.1          seacarb_3.3.0      knitr_1.37         ps_1.6.0          
+[65] pillar_1.6.4       reprex_2.0.1       glue_1.6.0         evaluate_0.14     
+[69] getPass_0.2-2      modelr_0.1.8       vctrs_0.3.8        tzdb_0.2.0        
+[73] httpuv_1.6.5       cellranger_1.1.0   gtable_0.3.0       assertthat_0.2.1  
+[77] xfun_0.29          lwgeom_0.2-8       broom_0.7.11       e1071_1.7-9       
+[81] later_1.3.0        class_7.3-20       units_0.7-2        ellipsis_0.3.2    </code></pre>
 </div>
 
 
