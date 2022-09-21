@@ -494,16 +494,16 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreeb5ad6b0dc61bec03ee5397e595f9d16497ef9124targetblankb5ad6b0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/b5ad6b0dc61bec03ee5397e595f9d16497ef9124" target="_blank">b5ad6b0</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreed51ef4eaabf43ab5bf5b3dd8fe6cc49c2ce7a7f3targetblankd51ef4ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/d51ef4eaabf43ab5bf5b3dd8fe6cc49c2ce7a7f3" target="_blank">d51ef4e</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreeb5ad6b0dc61bec03ee5397e595f9d16497ef9124targetblankb5ad6b0a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreed51ef4eaabf43ab5bf5b3dd8fe6cc49c2ce7a7f3targetblankd51ef4ea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/b5ad6b0dc61bec03ee5397e595f9d16497ef9124" target="_blank">b5ad6b0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/d51ef4eaabf43ab5bf5b3dd8fe6cc49c2ce7a7f3" target="_blank">d51ef4e</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -553,6 +553,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/d51ef4eaabf43ab5bf5b3dd8fe6cc49c2ce7a7f3/analysis/read_RECCAP2_2D_files.Rmd" target="_blank">d51ef4e</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+<td>
+calculate area-averaged means, and integrated fluxes
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/read_RECCAP2_2D_files.html" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -720,6 +754,8 @@ jens-daniel-mueller
 </table>
 </div>
 </div>
+<pre class="r"><code>region_masks_all &lt;- region_masks_all %&gt;% 
+    mutate(area = earth_surf(lat = lat))</code></pre>
 <pre class="r"><code>models &lt;- list.files(path_cmorized)
 
 models &lt;-
@@ -754,7 +790,7 @@ variables &lt;-
 # models &lt;- models[8]
 
 for (i_model in models) {
-  # i_model &lt;- models[3]
+  # i_model &lt;- models[1]
   print(i_model)
   
   for (i_model_ID in model_IDs) {
@@ -794,7 +830,7 @@ for (i_model in models) {
           pattern = paste0(i_variable, &quot;_&quot;)
         )
       
-      print(file)
+      # print(file)
       
       file &lt;-
         file[str_detect(file, pattern = paste0(&quot;_&quot;, i_model_ID, &quot;_&quot;))]
@@ -906,14 +942,14 @@ for (i_model in models) {
       # )
       # 
 
-      # calculate biome average variable
+      # calculate area-weighted average per biome
       variable_data_tibble_biome_average &lt;-
         variable_data_tibble %&gt;%
         select(-c(lon, lat)) %&gt;% 
-        fgroup_by(year, month, biome) %&gt;% {
-          add_vars(fgroup_vars(., &quot;unique&quot;),
-                   fmean(., keep.group_vars = FALSE))
-        }
+        group_by(year, month, biome) %&gt;%
+        summarise(!!sym(i_variable) := weighted.mean(x = !!sym(i_variable),
+                                                     w = area)) %&gt;% 
+        ungroup()
       
       print(
         variable_data_tibble_biome_average %&gt;%
@@ -924,6 +960,36 @@ for (i_model in models) {
           labs(title = i_model) +
           facet_wrap( ~ biome)
       )
+      
+      if (i_variable == &quot;fgco2&quot;) {
+        fgco2_reg &lt;-
+          variable_data_tibble %&gt;%
+          select(-c(lon, lat)) %&gt;%
+          mutate(fgco2 = fgco2 * area) %&gt;%
+          group_by(year, month, biome) %&gt;%
+          summarise(fgco2_reg := sum(fgco2)) %&gt;%
+          ungroup()
+        
+        fgco2_reg &lt;- fgco2_reg %&gt;% 
+          mutate(fgco2_reg = fgco2_reg * (365.25 * 24 * 60 * 60 * 12.011))
+        
+        variable_data_tibble_biome_average &lt;-
+          left_join(variable_data_tibble_biome_average,
+                    fgco2_reg)
+        
+        print(
+          variable_data_tibble_biome_average %&gt;%
+            mutate(year = as.factor(year)) %&gt;%
+            ggplot(aes(month, fgco2_reg, col = year)) +
+            geom_hline(yintercept = 0) +
+            geom_path() +
+            scale_color_viridis_d() +
+            labs(title = i_model) +
+            facet_wrap(~ biome)
+        )
+        
+      }
+      
       
       if (exists(&quot;biome_model_ID&quot;)) {
         biome_model_ID &lt;-
@@ -1012,10 +1078,6 @@ for (i_model in models) {
 [1] &quot;A&quot;
 [1] &quot;dissicos&quot; &quot;fgco2&quot;    &quot;sos&quot;      &quot;spco2&quot;    &quot;tos&quot;     
 [1] &quot;dissicos&quot;
-[1] &quot;dissicos_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;
-[2] &quot;dissicos_CESM-ETHZ_B_1_gr_1980-2018_v20211122.nc&quot;
-[3] &quot;dissicos_CESM-ETHZ_C_1_gr_1980-2018_v20211122.nc&quot;
-[4] &quot;dissicos_CESM-ETHZ_D_1_gr_1980-2018_v20211122.nc&quot;
 [1] &quot;dissicos_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -1042,6 +1104,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-1.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/00d667348b6a882225d8256566a5c6e224dce683/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-1.png" target="_blank">00d6673</a>
 </td>
 <td>
@@ -1056,448 +1129,1998 @@ jens-daniel-mueller
 </div>
 </div>
 <pre><code>[1] &quot;fgco2&quot;
- [1] &quot;fgco2_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;     
- [2] &quot;fgco2_CESM-ETHZ_B_1_gr_1980-2018_v20211122.nc&quot;     
- [3] &quot;fgco2_CESM-ETHZ_C_1_gr_1980-2018_v20211122.nc&quot;     
- [4] &quot;fgco2_CESM-ETHZ_D_1_gr_1980-2018_v20211122.nc&quot;     
- [5] &quot;fgco2_glob_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;
- [6] &quot;fgco2_glob_CESM-ETHZ_B_1_gr_1980-2018_v20211122.nc&quot;
- [7] &quot;fgco2_glob_CESM-ETHZ_C_1_gr_1980-2018_v20211122.nc&quot;
- [8] &quot;fgco2_glob_CESM-ETHZ_D_1_gr_1980-2018_v20211122.nc&quot;
- [9] &quot;fgco2_reg_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot; 
-[10] &quot;fgco2_reg_CESM-ETHZ_B_1_gr_1980-2018_v20211122.nc&quot; 
-[11] &quot;fgco2_reg_CESM-ETHZ_C_1_gr_1980-2018_v20211122.nc&quot; 
-[12] &quot;fgco2_reg_CESM-ETHZ_D_1_gr_1980-2018_v20211122.nc&quot; 
 [1] &quot;fgco2_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-2.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;sos&quot;
-[1] &quot;sos_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;
-[2] &quot;sos_CESM-ETHZ_B_1_gr_1980-2018_v20211122.nc&quot;
-[3] &quot;sos_CESM-ETHZ_C_1_gr_1980-2018_v20211122.nc&quot;
-[4] &quot;sos_CESM-ETHZ_D_1_gr_1980-2018_v20211122.nc&quot;
-[1] &quot;sos_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-2">
+Past versions of subset_cmorized_variable_forcing_data-2.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-2.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-3.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;spco2&quot;
-[1] &quot;spco2_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;
-[2] &quot;spco2_CESM-ETHZ_B_1_gr_1980-2018_v20211122.nc&quot;
-[3] &quot;spco2_CESM-ETHZ_C_1_gr_1980-2018_v20211122.nc&quot;
-[4] &quot;spco2_CESM-ETHZ_D_1_gr_1980-2018_v20211122.nc&quot;
-[1] &quot;spco2_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-3">
+Past versions of subset_cmorized_variable_forcing_data-3.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-3.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;sos&quot;
+[1] &quot;sos_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-4.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;tos&quot;
-[1] &quot;tos_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;
-[2] &quot;tos_CESM-ETHZ_B_1_gr_1980-2018_v20211122.nc&quot;
-[3] &quot;tos_CESM-ETHZ_C_1_gr_1980-2018_v20211122.nc&quot;
-[4] &quot;tos_CESM-ETHZ_D_1_gr_1980-2018_v20211122.nc&quot;
-[1] &quot;tos_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-4">
+Past versions of subset_cmorized_variable_forcing_data-4.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-4.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;spco2&quot;
+[1] &quot;spco2_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-5">
+Past versions of subset_cmorized_variable_forcing_data-5.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-5.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;tos&quot;
+[1] &quot;tos_CESM-ETHZ_A_1_gr_1980-2018_v20211122.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-6.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-6">
+Past versions of subset_cmorized_variable_forcing_data-6.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-6.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;CNRM-ESM2-1_2D_CO2_v20211208&quot;
 [1] &quot;A&quot;
 [1] &quot;fgco2&quot; &quot;sos&quot;   &quot;spco2&quot; &quot;tos&quot;  
 [1] &quot;fgco2&quot;
- [1] &quot;fgco2_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;      
- [2] &quot;fgco2_CNRM-ESM2-1_B_1_gr_1980-2018_v20211208.nc&quot;      
- [3] &quot;fgco2_CNRM-ESM2-1_C_1_gr_1980-2018_v20211208.nc&quot;      
- [4] &quot;fgco2_CNRM-ESM2-1_D_1_gr_1980-2018_v20211208.nc&quot;      
- [5] &quot;fgco2_glob_CNRM-ESM2-1_A_1_gr_1980_2018_v20211208.txt&quot;
- [6] &quot;fgco2_glob_CNRM-ESM2-1_B_1_gr_1980_2018_v20211208.txt&quot;
- [7] &quot;fgco2_glob_CNRM-ESM2-1_C_1_gr_1980_2018_v20211208.txt&quot;
- [8] &quot;fgco2_glob_CNRM-ESM2-1_D_1_gr_1980_2018_v20211208.txt&quot;
- [9] &quot;fgco2_reg1_CNRM-ESM2-1_A_1_gr_1980_2018_v20211208.txt&quot;
-[10] &quot;fgco2_reg1_CNRM-ESM2-1_B_1_gr_1980_2018_v20211208.txt&quot;
-[11] &quot;fgco2_reg1_CNRM-ESM2-1_C_1_gr_1980_2018_v20211208.txt&quot;
-[12] &quot;fgco2_reg1_CNRM-ESM2-1_D_1_gr_1980_2018_v20211208.txt&quot;
-[13] &quot;fgco2_reg2_CNRM-ESM2-1_A_1_gr_1980_2018_v20211208.txt&quot;
-[14] &quot;fgco2_reg2_CNRM-ESM2-1_B_1_gr_1980_2018_v20211208.txt&quot;
-[15] &quot;fgco2_reg2_CNRM-ESM2-1_C_1_gr_1980_2018_v20211208.txt&quot;
-[16] &quot;fgco2_reg2_CNRM-ESM2-1_D_1_gr_1980_2018_v20211208.txt&quot;
-[17] &quot;fgco2_reg3_CNRM-ESM2-1_A_1_gr_1980_2018_v20211208.txt&quot;
-[18] &quot;fgco2_reg3_CNRM-ESM2-1_B_1_gr_1980_2018_v20211208.txt&quot;
-[19] &quot;fgco2_reg3_CNRM-ESM2-1_C_1_gr_1980_2018_v20211208.txt&quot;
-[20] &quot;fgco2_reg3_CNRM-ESM2-1_D_1_gr_1980_2018_v20211208.txt&quot;
-[21] &quot;fgco2_reg4_CNRM-ESM2-1_A_1_gr_1980_2018_v20211208.txt&quot;
-[22] &quot;fgco2_reg4_CNRM-ESM2-1_B_1_gr_1980_2018_v20211208.txt&quot;
-[23] &quot;fgco2_reg4_CNRM-ESM2-1_C_1_gr_1980_2018_v20211208.txt&quot;
-[24] &quot;fgco2_reg4_CNRM-ESM2-1_D_1_gr_1980_2018_v20211208.txt&quot;
-[25] &quot;fgco2_reg5_CNRM-ESM2-1_A_1_gr_1980_2018_v20211208.txt&quot;
-[26] &quot;fgco2_reg5_CNRM-ESM2-1_B_1_gr_1980_2018_v20211208.txt&quot;
-[27] &quot;fgco2_reg5_CNRM-ESM2-1_C_1_gr_1980_2018_v20211208.txt&quot;
-[28] &quot;fgco2_reg5_CNRM-ESM2-1_D_1_gr_1980_2018_v20211208.txt&quot;
-[29] &quot;fgco2_reg6_CNRM-ESM2-1_A_1_gr_1980_2018_v20211208.txt&quot;
-[30] &quot;fgco2_reg6_CNRM-ESM2-1_B_1_gr_1980_2018_v20211208.txt&quot;
-[31] &quot;fgco2_reg6_CNRM-ESM2-1_C_1_gr_1980_2018_v20211208.txt&quot;
-[32] &quot;fgco2_reg6_CNRM-ESM2-1_D_1_gr_1980_2018_v20211208.txt&quot;
 [1] &quot;fgco2_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-6.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;sos&quot;
-[1] &quot;sos_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;
-[2] &quot;sos_CNRM-ESM2-1_B_1_gr_1980-2018_v20211208.nc&quot;
-[3] &quot;sos_CNRM-ESM2-1_C_1_gr_1980-2018_v20211208.nc&quot;
-[4] &quot;sos_CNRM-ESM2-1_D_1_gr_1980-2018_v20211208.nc&quot;
-[1] &quot;sos_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-7.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;spco2&quot;
-[1] &quot;spco2_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;
-[2] &quot;spco2_CNRM-ESM2-1_B_1_gr_1980-2018_v20211208.nc&quot;
-[3] &quot;spco2_CNRM-ESM2-1_C_1_gr_1980-2018_v20211208.nc&quot;
-[4] &quot;spco2_CNRM-ESM2-1_D_1_gr_1980-2018_v20211208.nc&quot;
-[1] &quot;spco2_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-7">
+Past versions of subset_cmorized_variable_forcing_data-7.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-7.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-8.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;tos&quot;
-[1] &quot;tos_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;
-[2] &quot;tos_CNRM-ESM2-1_B_1_gr_1980-2018_v20211208.nc&quot;
-[3] &quot;tos_CNRM-ESM2-1_C_1_gr_1980-2018_v20211208.nc&quot;
-[4] &quot;tos_CNRM-ESM2-1_D_1_gr_1980-2018_v20211208.nc&quot;
-[1] &quot;tos_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-8">
+Past versions of subset_cmorized_variable_forcing_data-8.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-8.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;sos&quot;
+[1] &quot;sos_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-9.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-9">
+Past versions of subset_cmorized_variable_forcing_data-9.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-9.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;spco2&quot;
+[1] &quot;spco2_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-10.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-10">
+Past versions of subset_cmorized_variable_forcing_data-10.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-10" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-10.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;tos&quot;
+[1] &quot;tos_CNRM-ESM2-1_A_1_gr_1980-2018_v20211208.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-11.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-11">
+Past versions of subset_cmorized_variable_forcing_data-11.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-11" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-11.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;EC-Earth3_2D_CO2_v20220323&quot;
 [1] &quot;A&quot;
 [1] &quot;dissicos&quot; &quot;fgco2&quot;    &quot;sos&quot;      &quot;spco2&quot;    &quot;tos&quot;     
 [1] &quot;dissicos&quot;
-[1] &quot;dissicos_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;
-[2] &quot;dissicos_EC-Earth3_B_1_gr_1980-2018_v20220323.nc&quot;
-[3] &quot;dissicos_EC-Earth3_C_1_gr_1980-2018_v20220323.nc&quot;
-[4] &quot;dissicos_EC-Earth3_D_1_gr_1980-2018_v20220323.nc&quot;
 [1] &quot;dissicos_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-10.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;fgco2&quot;
-[1] &quot;fgco2_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;     
-[2] &quot;fgco2_EC-Earth3_B_1_gr_1980-2018_v20220323.nc&quot;     
-[3] &quot;fgco2_EC-Earth3_C_1_gr_1980-2018_v20220323.nc&quot;     
-[4] &quot;fgco2_EC-Earth3_D_1_gr_1980-2018_v20220323.nc&quot;     
-[5] &quot;fgco2_glob_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;
-[6] &quot;fgco2_glob_EC-Earth3_B_1_gr_1980-2018_v20220323.nc&quot;
-[7] &quot;fgco2_glob_EC-Earth3_C_1_gr_1980-2018_v20220323.nc&quot;
-[8] &quot;fgco2_glob_EC-Earth3_D_1_gr_1980-2018_v20220323.nc&quot;
-[1] &quot;fgco2_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-11.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;sos&quot;
-[1] &quot;sos_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;
-[2] &quot;sos_EC-Earth3_B_1_gr_1980-2018_v20220323.nc&quot;
-[3] &quot;sos_EC-Earth3_C_1_gr_1980-2018_v20220323.nc&quot;
-[4] &quot;sos_EC-Earth3_D_1_gr_1980-2018_v20220323.nc&quot;
-[1] &quot;sos_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-12.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;spco2&quot;
-[1] &quot;spco2_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;
-[2] &quot;spco2_EC-Earth3_B_1_gr_1980-2018_v20220323.nc&quot;
-[3] &quot;spco2_EC-Earth3_C_1_gr_1980-2018_v20220323.nc&quot;
-[4] &quot;spco2_EC-Earth3_D_1_gr_1980-2018_v20220323.nc&quot;
-[1] &quot;spco2_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-12">
+Past versions of subset_cmorized_variable_forcing_data-12.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-12" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-12.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;fgco2&quot;
+[1] &quot;fgco2_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-13.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;tos&quot;
-[1] &quot;tos_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;
-[2] &quot;tos_EC-Earth3_B_1_gr_1980-2018_v20220323.nc&quot;
-[3] &quot;tos_EC-Earth3_C_1_gr_1980-2018_v20220323.nc&quot;
-[4] &quot;tos_EC-Earth3_D_1_gr_1980-2018_v20220323.nc&quot;
-[1] &quot;tos_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-13">
+Past versions of subset_cmorized_variable_forcing_data-13.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-13" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-13.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-14.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-14">
+Past versions of subset_cmorized_variable_forcing_data-14.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-14" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-14.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;sos&quot;
+[1] &quot;sos_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-15.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-15">
+Past versions of subset_cmorized_variable_forcing_data-15.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-15" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-15.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;spco2&quot;
+[1] &quot;spco2_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-16.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-16">
+Past versions of subset_cmorized_variable_forcing_data-16.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-16" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-16.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;tos&quot;
+[1] &quot;tos_EC-Earth3_A_1_gr_1980-2018_v20220323.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-17.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-17">
+Past versions of subset_cmorized_variable_forcing_data-17.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-17" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-17.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;FESOM_REcoM_LR_2D_CO2_v20211119&quot;
 [1] &quot;A&quot;
 [1] &quot;dissicos&quot; &quot;fgco2&quot;    &quot;sos&quot;      &quot;spco2&quot;    &quot;tos&quot;     
 [1] &quot;dissicos&quot;
-[1] &quot;dissicos_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;
-[2] &quot;dissicos_FESOM_REcoM_LR_B_1_gr_1980-2018_v20211119.nc&quot;
-[3] &quot;dissicos_FESOM_REcoM_LR_C_1_gr_1980-2018_v20211119.nc&quot;
-[4] &quot;dissicos_FESOM_REcoM_LR_D_1_gr_1980-2018_v20211119.nc&quot;
 [1] &quot;dissicos_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-15.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;fgco2&quot;
- [1] &quot;fgco2_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;     
- [2] &quot;fgco2_FESOM_REcoM_LR_B_1_gr_1980-2018_v20211119.nc&quot;     
- [3] &quot;fgco2_FESOM_REcoM_LR_C_1_gr_1980-2018_v20211119.nc&quot;     
- [4] &quot;fgco2_FESOM_REcoM_LR_D_1_gr_1980-2018_v20211119.nc&quot;     
- [5] &quot;fgco2_glob_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;
- [6] &quot;fgco2_glob_FESOM_REcoM_LR_B_1_gr_1980-2018_v20211119.nc&quot;
- [7] &quot;fgco2_glob_FESOM_REcoM_LR_C_1_gr_1980-2018_v20211119.nc&quot;
- [8] &quot;fgco2_glob_FESOM_REcoM_LR_D_1_gr_1980-2018_v20211119.nc&quot;
- [9] &quot;fgco2_reg_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot; 
-[10] &quot;fgco2_reg_FESOM_REcoM_LR_B_1_gr_1980-2018_v20211119.nc&quot; 
-[11] &quot;fgco2_reg_FESOM_REcoM_LR_C_1_gr_1980-2018_v20211119.nc&quot; 
-[12] &quot;fgco2_reg_FESOM_REcoM_LR_D_1_gr_1980-2018_v20211119.nc&quot; 
-[1] &quot;fgco2_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-16.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;sos&quot;
-[1] &quot;sos_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;
-[2] &quot;sos_FESOM_REcoM_LR_B_1_gr_1980-2018_v20211119.nc&quot;
-[3] &quot;sos_FESOM_REcoM_LR_C_1_gr_1980-2018_v20211119.nc&quot;
-[4] &quot;sos_FESOM_REcoM_LR_D_1_gr_1980-2018_v20211119.nc&quot;
-[1] &quot;sos_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-17.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;spco2&quot;
-[1] &quot;spco2_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;
-[2] &quot;spco2_FESOM_REcoM_LR_B_1_gr_1980-2018_v20211119.nc&quot;
-[3] &quot;spco2_FESOM_REcoM_LR_C_1_gr_1980-2018_v20211119.nc&quot;
-[4] &quot;spco2_FESOM_REcoM_LR_D_1_gr_1980-2018_v20211119.nc&quot;
-[1] &quot;spco2_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-18.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;tos&quot;
-[1] &quot;tos_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;
-[2] &quot;tos_FESOM_REcoM_LR_B_1_gr_1980-2018_v20211119.nc&quot;
-[3] &quot;tos_FESOM_REcoM_LR_C_1_gr_1980-2018_v20211119.nc&quot;
-[4] &quot;tos_FESOM_REcoM_LR_D_1_gr_1980-2018_v20211119.nc&quot;
-[1] &quot;tos_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-18">
+Past versions of subset_cmorized_variable_forcing_data-18.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-18" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-18.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;fgco2&quot;
+[1] &quot;fgco2_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-19.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-19">
+Past versions of subset_cmorized_variable_forcing_data-19.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-19" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-19.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-20.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-20">
+Past versions of subset_cmorized_variable_forcing_data-20.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-20" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-20.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;sos&quot;
+[1] &quot;sos_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-21.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-21">
+Past versions of subset_cmorized_variable_forcing_data-21.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-21" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-21.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;spco2&quot;
+[1] &quot;spco2_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-22.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-22">
+Past versions of subset_cmorized_variable_forcing_data-22.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-22" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-22.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;tos&quot;
+[1] &quot;tos_FESOM_REcoM_LR_A_1_gr_1980-2018_v20211119.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-23.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-23">
+Past versions of subset_cmorized_variable_forcing_data-23.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-23" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-23.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;MOM6-Princeton_2D_CO2_v20220125&quot;
 [1] &quot;A&quot;
 [1] &quot;dissicos&quot; &quot;fgco2&quot;    &quot;sos&quot;      &quot;spco2&quot;    &quot;tos&quot;     
 [1] &quot;dissicos&quot;
-[1] &quot;dissicos_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;
-[2] &quot;dissicos_MOM6-Princeton_B_1_gr_1980-2018_v20220125.nc&quot;
 [1] &quot;dissicos_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-20.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;fgco2&quot;
-[1] &quot;fgco2_glob_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;
-[2] &quot;fgco2_glob_MOM6-Princeton_B_1_gr_1980-2018_v20220125.nc&quot;
-[3] &quot;fgco2_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;     
-[4] &quot;fgco2_MOM6-Princeton_B_1_gr_1980-2018_v20220125.nc&quot;     
-[5] &quot;fgco2_reg_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot; 
-[6] &quot;fgco2_reg_MOM6-Princeton_B_1_gr_1980-2018_v20220125.nc&quot; 
-[1] &quot;fgco2_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-21.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;sos&quot;
-[1] &quot;sos_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;
-[2] &quot;sos_MOM6-Princeton_B_1_gr_1980-2018_v20220125.nc&quot;
-[1] &quot;sos_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-22.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;spco2&quot;
-[1] &quot;spco2_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;
-[2] &quot;spco2_MOM6-Princeton_B_1_gr_1980-2018_v20220125.nc&quot;
-[1] &quot;spco2_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-23.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] &quot;tos&quot;
-[1] &quot;tos_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;
-[2] &quot;tos_MOM6-Princeton_B_1_gr_1980-2018_v20220125.nc&quot;
-[1] &quot;tos_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;</code></pre>
 <p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-24.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-24">
+Past versions of subset_cmorized_variable_forcing_data-24.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-24" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-24.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;fgco2&quot;
+[1] &quot;fgco2_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-25.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-25">
+Past versions of subset_cmorized_variable_forcing_data-25.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-25" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-25.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-26.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-26">
+Past versions of subset_cmorized_variable_forcing_data-26.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-26" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-26.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;sos&quot;
+[1] &quot;sos_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-27.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-27">
+Past versions of subset_cmorized_variable_forcing_data-27.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-27" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-27.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;spco2&quot;
+[1] &quot;spco2_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-28.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-28">
+Past versions of subset_cmorized_variable_forcing_data-28.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-28" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-28.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] &quot;tos&quot;
+[1] &quot;tos_MOM6-Princeton_A_1_gr_1980-2018_v20220125.nc&quot;</code></pre>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-29.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-29">
+Past versions of subset_cmorized_variable_forcing_data-29.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-29" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-29.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;MRI-ESM2-1_2D_CO2_v20220502&quot;
 [1] &quot;A&quot;
 [1] &quot;dissicos&quot; &quot;fgco2&quot;    &quot;sos&quot;      &quot;spco2&quot;    &quot;tos&quot;     
 [1] &quot;dissicos&quot;
-[1] &quot;dissicos_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;
-[2] &quot;dissicos_MRI-ESM2-1_B_1_gr_1980-2018_v20220502.nc&quot;
-[3] &quot;dissicos_MRI-ESM2-1_C_1_gr_1980-2018_v20220502.nc&quot;
-[4] &quot;dissicos_MRI-ESM2-1_D_1_gr_1980-2018_v20220502.nc&quot;
 [1] &quot;dissicos_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-25.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-30.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-30">
+Past versions of subset_cmorized_variable_forcing_data-30.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-30" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-30.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;fgco2&quot;
- [1] &quot;fgco2_glob_MRI-ESM2-1_A_1_gm_1980-2018_v20220502.nc&quot;
- [2] &quot;fgco2_glob_MRI-ESM2-1_B_1_gm_1980-2018_v20220502.nc&quot;
- [3] &quot;fgco2_glob_MRI-ESM2-1_C_1_gm_1980-2018_v20220502.nc&quot;
- [4] &quot;fgco2_glob_MRI-ESM2-1_D_1_gm_1980-2018_v20220502.nc&quot;
- [5] &quot;fgco2_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;     
- [6] &quot;fgco2_MRI-ESM2-1_B_1_gr_1980-2018_v20220502.nc&quot;     
- [7] &quot;fgco2_MRI-ESM2-1_C_1_gr_1980-2018_v20220502.nc&quot;     
- [8] &quot;fgco2_MRI-ESM2-1_D_1_gr_1980-2018_v20220502.nc&quot;     
- [9] &quot;fgco2_reg_MRI-ESM2-1_A_1_gmr_1980-2018_v20220502.nc&quot;
-[10] &quot;fgco2_reg_MRI-ESM2-1_B_1_gmr_1980-2018_v20220502.nc&quot;
-[11] &quot;fgco2_reg_MRI-ESM2-1_C_1_gmr_1980-2018_v20220502.nc&quot;
-[12] &quot;fgco2_reg_MRI-ESM2-1_D_1_gmr_1980-2018_v20220502.nc&quot;
 [1] &quot;fgco2_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-26.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-31.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-31">
+Past versions of subset_cmorized_variable_forcing_data-31.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-31" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-31.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-32.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-32">
+Past versions of subset_cmorized_variable_forcing_data-32.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-32" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-32.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;sos&quot;
-[1] &quot;sos_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;
-[2] &quot;sos_MRI-ESM2-1_C_1_gr_1980-2018_v20220502.nc&quot;
 [1] &quot;sos_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-27.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-33.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-33">
+Past versions of subset_cmorized_variable_forcing_data-33.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-33" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-33.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;spco2&quot;
-[1] &quot;spco2_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;
-[2] &quot;spco2_MRI-ESM2-1_B_1_gr_1980-2018_v20220502.nc&quot;
-[3] &quot;spco2_MRI-ESM2-1_C_1_gr_1980-2018_v20220502.nc&quot;
-[4] &quot;spco2_MRI-ESM2-1_D_1_gr_1980-2018_v20220502.nc&quot;
 [1] &quot;spco2_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-28.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-34.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-34">
+Past versions of subset_cmorized_variable_forcing_data-34.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-34" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-34.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;tos&quot;
-[1] &quot;dissicnatos_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;
-[2] &quot;dissicnatos_MRI-ESM2-1_C_1_gr_1980-2018_v20220502.nc&quot;
-[3] &quot;tos_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;        
-[4] &quot;tos_MRI-ESM2-1_C_1_gr_1980-2018_v20220502.nc&quot;        
 [1] &quot;tos_MRI-ESM2-1_A_1_gr_1980-2018_v20220502.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-29.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-35.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-35">
+Past versions of subset_cmorized_variable_forcing_data-35.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-35" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-35.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;NorESM-OC1.2_2D_CO2_v20211125&quot;
 [1] &quot;A&quot;
 [1] &quot;dissicos&quot; &quot;fgco2&quot;    &quot;sos&quot;      &quot;spco2&quot;    &quot;tos&quot;     
 [1] &quot;dissicos&quot;
-[1] &quot;dissicos_NorESM-OC1.2_A_1_gr_1980-2018_v20211125.nc&quot;
-[2] &quot;dissicos_NorESM-OC1.2_B_1_gr_1980-2018_v20211125.nc&quot;
-[3] &quot;dissicos_NorESM-OC1.2_C_1_gr_1980-2018_v20211125.nc&quot;
-[4] &quot;dissicos_NorESM-OC1.2_D_1_gr_1980-2018_v20211125.nc&quot;
 [1] &quot;dissicos_NorESM-OC1.2_A_1_gr_1980-2018_v20211125.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-30.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-36.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-36">
+Past versions of subset_cmorized_variable_forcing_data-36.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-36" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-36.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;fgco2&quot;
- [1] &quot;fgco2_glob_NorESM-OC1.2_A_1_1980-2018_v20211125.nc&quot;
- [2] &quot;fgco2_glob_NorESM-OC1.2_B_1_1980-2018_v20211125.nc&quot;
- [3] &quot;fgco2_glob_NorESM-OC1.2_C_1_1980-2018_v20211125.nc&quot;
- [4] &quot;fgco2_glob_NorESM-OC1.2_D_1_1980-2018_v20211125.nc&quot;
- [5] &quot;fgco2_NorESM-OC1.2_A_1_gr_1980-2018_v20211125.nc&quot;  
- [6] &quot;fgco2_NorESM-OC1.2_B_1_gr_1980-2018_v20211125.nc&quot;  
- [7] &quot;fgco2_NorESM-OC1.2_C_1_gr_1980-2018_v20211125.nc&quot;  
- [8] &quot;fgco2_NorESM-OC1.2_D_1_gr_1980-2018_v20211125.nc&quot;  
- [9] &quot;fgco2_reg_NorESM-OC1.2_A_1_1980-2018_v20211125.nc&quot; 
-[10] &quot;fgco2_reg_NorESM-OC1.2_B_1_1980-2018_v20211125.nc&quot; 
-[11] &quot;fgco2_reg_NorESM-OC1.2_C_1_1980-2018_v20211125.nc&quot; 
-[12] &quot;fgco2_reg_NorESM-OC1.2_D_1_1980-2018_v20211125.nc&quot; 
 [1] &quot;fgco2_NorESM-OC1.2_A_1_gr_1980-2018_v20211125.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-31.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-37.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-37">
+Past versions of subset_cmorized_variable_forcing_data-37.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-37" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-37.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-38.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-38">
+Past versions of subset_cmorized_variable_forcing_data-38.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-38" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-38.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;sos&quot;
-[1] &quot;sos_NorESM-OC1.2_A_1_gr_1980-2018_v20211125.nc&quot;
-[2] &quot;sos_NorESM-OC1.2_B_1_gr_1980-2018_v20211125.nc&quot;
-[3] &quot;sos_NorESM-OC1.2_C_1_gr_1980-2018_v20211125.nc&quot;
-[4] &quot;sos_NorESM-OC1.2_D_1_gr_1980-2018_v20211125.nc&quot;
 [1] &quot;sos_NorESM-OC1.2_A_1_gr_1980-2018_v20211125.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-32.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-39.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-39">
+Past versions of subset_cmorized_variable_forcing_data-39.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-39" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-39.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;spco2&quot;
-[1] &quot;spco2_NorESM-OC1.2_A_1_gr_1980-2018_v20211125.nc&quot;
-[2] &quot;spco2_NorESM-OC1.2_B_1_gr_1980-2018_v20211125.nc&quot;
-[3] &quot;spco2_NorESM-OC1.2_C_1_gr_1980-2018_v20211125.nc&quot;
-[4] &quot;spco2_NorESM-OC1.2_D_1_gr_1980-2018_v20211125.nc&quot;
 [1] &quot;spco2_NorESM-OC1.2_A_1_gr_1980-2018_v20211125.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-33.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-40.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-40">
+Past versions of subset_cmorized_variable_forcing_data-40.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-40" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-40.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;tos&quot;
-[1] &quot;tos_NorESM-OC1.2_A_1_gr_1980-2018_v20211125.nc&quot;
-[2] &quot;tos_NorESM-OC1.2_B_1_gr_1980-2018_v20211125.nc&quot;
-[3] &quot;tos_NorESM-OC1.2_C_1_gr_1980-2018_v20211125.nc&quot;
-[4] &quot;tos_NorESM-OC1.2_D_1_gr_1980-2018_v20211125.nc&quot;
 [1] &quot;tos_NorESM-OC1.2_A_1_gr_1980-2018_v20211125.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-34.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-41.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-41">
+Past versions of subset_cmorized_variable_forcing_data-41.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-41" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-41.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;ORCA025-GEOMAR_2D_CO2_v20210804&quot;
 [1] &quot;A&quot;
 [1] &quot;dissicos&quot; &quot;fgco2&quot;    &quot;sos&quot;      &quot;spco2&quot;    &quot;tos&quot;     
 [1] &quot;dissicos&quot;
-[1] &quot;dissicos_ORCA025-GEOMAR_A_1_gr_1980-2018_v20210804.nc&quot;
-[2] &quot;dissicos_ORCA025-GEOMAR_B_1_gr_1980-2018_v20210804.nc&quot;
-[3] &quot;dissicos_ORCA025-GEOMAR_C_1_gr_1980-2018_v20210804.nc&quot;
-[4] &quot;dissicos_ORCA025-GEOMAR_D_1_gr_1980-2018_v20210804.nc&quot;
 [1] &quot;dissicos_ORCA025-GEOMAR_A_1_gr_1980-2018_v20210804.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-35.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-42.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-42">
+Past versions of subset_cmorized_variable_forcing_data-42.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-42" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-42.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;fgco2&quot;
- [1] &quot;fgco2_glob_ORCA025-GEOMAR_A_1_1980-2018_v20210804.nc&quot;
- [2] &quot;fgco2_glob_ORCA025-GEOMAR_B_1_1980-2018_v20210804.nc&quot;
- [3] &quot;fgco2_glob_ORCA025-GEOMAR_C_1_1980-2018_v20210804.nc&quot;
- [4] &quot;fgco2_glob_ORCA025-GEOMAR_D_1_1980-2018_v20210804.nc&quot;
- [5] &quot;fgco2_ORCA025-GEOMAR_A_1_gr_1980-2018_v20210804.nc&quot;  
- [6] &quot;fgco2_ORCA025-GEOMAR_B_1_gr_1980-2018_v20210804.nc&quot;  
- [7] &quot;fgco2_ORCA025-GEOMAR_C_1_gr_1980-2018_v20210804.nc&quot;  
- [8] &quot;fgco2_ORCA025-GEOMAR_D_1_gr_1980-2018_v20210804.nc&quot;  
- [9] &quot;fgco2_reg_ORCA025-GEOMAR_A_1_1980-2018_v20210804.nc&quot; 
-[10] &quot;fgco2_reg_ORCA025-GEOMAR_B_1_1980-2018_v20210804.nc&quot; 
-[11] &quot;fgco2_reg_ORCA025-GEOMAR_C_1_1980-2018_v20210804.nc&quot; 
-[12] &quot;fgco2_reg_ORCA025-GEOMAR_D_1_1980-2018_v20210804.nc&quot; 
 [1] &quot;fgco2_ORCA025-GEOMAR_A_1_gr_1980-2018_v20210804.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-36.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-43.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-43">
+Past versions of subset_cmorized_variable_forcing_data-43.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-43" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-43.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-44.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-44">
+Past versions of subset_cmorized_variable_forcing_data-44.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-44" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-44.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;sos&quot;
-[1] &quot;sos_ORCA025-GEOMAR_A_1_gr_1980-2018_v20210804.nc&quot;
-[2] &quot;sos_ORCA025-GEOMAR_B_1_gr_1980-2018_v20210804.nc&quot;
-[3] &quot;sos_ORCA025-GEOMAR_C_1_gr_1980-2018_v20210804.nc&quot;
-[4] &quot;sos_ORCA025-GEOMAR_D_1_gr_1980-2018_v20210804.nc&quot;
 [1] &quot;sos_ORCA025-GEOMAR_A_1_gr_1980-2018_v20210804.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-37.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-45.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-45">
+Past versions of subset_cmorized_variable_forcing_data-45.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-45" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-45.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;spco2&quot;
-[1] &quot;spco2_ORCA025-GEOMAR_A_1_gr_1980-2018_v20210804.nc&quot;
-[2] &quot;spco2_ORCA025-GEOMAR_B_1_gr_1980-2018_v20210804.nc&quot;
-[3] &quot;spco2_ORCA025-GEOMAR_C_1_gr_1980-2018_v20210804.nc&quot;
-[4] &quot;spco2_ORCA025-GEOMAR_D_1_gr_1980-2018_v20210804.nc&quot;
 [1] &quot;spco2_ORCA025-GEOMAR_A_1_gr_1980-2018_v20210804.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-38.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-46.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-46">
+Past versions of subset_cmorized_variable_forcing_data-46.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-46" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-46.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;tos&quot;
-[1] &quot;tos_ORCA025-GEOMAR_A_1_gr_1980-2018_v20210804.nc&quot;
-[2] &quot;tos_ORCA025-GEOMAR_B_1_gr_1980-2018_v20210804.nc&quot;
-[3] &quot;tos_ORCA025-GEOMAR_C_1_gr_1980-2018_v20210804.nc&quot;
-[4] &quot;tos_ORCA025-GEOMAR_D_1_gr_1980-2018_v20210804.nc&quot;
 [1] &quot;tos_ORCA025-GEOMAR_A_1_gr_1980-2018_v20210804.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-39.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-47.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-47">
+Past versions of subset_cmorized_variable_forcing_data-47.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-47" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-47.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;ORCA1-LIM3-PISCES_2D_CO2_v20211215&quot;
 [1] &quot;A&quot;
 [1] &quot;dissicos&quot; &quot;fgco2&quot;    &quot;sos&quot;      &quot;spco2&quot;    &quot;tos&quot;     
 [1] &quot;dissicos&quot;
-[1] &quot;dissicos_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;
-[2] &quot;dissicos_ORCA1-LIM3-PISCES_B_1_gr_1980-2018_v20211215.nc&quot;
-[3] &quot;dissicos_ORCA1-LIM3-PISCES_C_1_gr_1980-2018_v20211215.nc&quot;
-[4] &quot;dissicos_ORCA1-LIM3-PISCES_D_1_gr_1980-2018_v20211215.nc&quot;
 [1] &quot;dissicos_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-40.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-48.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-48">
+Past versions of subset_cmorized_variable_forcing_data-48.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-48" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-48.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;fgco2&quot;
- [1] &quot;fgco2_glob_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;
- [2] &quot;fgco2_glob_ORCA1-LIM3-PISCES_B_1_gr_1980-2018_v20211215.nc&quot;
- [3] &quot;fgco2_glob_ORCA1-LIM3-PISCES_C_1_gr_1980-2018_v20211215.nc&quot;
- [4] &quot;fgco2_glob_ORCA1-LIM3-PISCES_D_1_gr_1980-2018_v20211215.nc&quot;
- [5] &quot;fgco2_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;     
- [6] &quot;fgco2_ORCA1-LIM3-PISCES_B_1_gr_1980-2018_v20211215.nc&quot;     
- [7] &quot;fgco2_ORCA1-LIM3-PISCES_C_1_gr_1980-2018_v20211215.nc&quot;     
- [8] &quot;fgco2_ORCA1-LIM3-PISCES_D_1_gr_1980-2018_v20211215.nc&quot;     
- [9] &quot;fgco2_reg_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot; 
-[10] &quot;fgco2_reg_ORCA1-LIM3-PISCES_B_1_gr_1980-2018_v20211215.nc&quot; 
-[11] &quot;fgco2_reg_ORCA1-LIM3-PISCES_C_1_gr_1980-2018_v20211215.nc&quot; 
-[12] &quot;fgco2_reg_ORCA1-LIM3-PISCES_D_1_gr_1980-2018_v20211215.nc&quot; 
 [1] &quot;fgco2_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-41.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-49.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-49">
+Past versions of subset_cmorized_variable_forcing_data-49.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-49" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-49.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-50.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subset_cmorized_variable_forcing_data-50">
+Past versions of subset_cmorized_variable_forcing_data-50.png
+</button>
+</p>
+<div id="fig-subset_cmorized_variable_forcing_data-50" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cfb86170c06111d11a8af20e54e1e6b012d3a7de/docs/figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-50.png" target="_blank">cfb8617</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>[1] &quot;sos&quot;
-[1] &quot;sos_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;
-[2] &quot;sos_ORCA1-LIM3-PISCES_B_1_gr_1980-2018_v20211215.nc&quot;
-[3] &quot;sos_ORCA1-LIM3-PISCES_C_1_gr_1980-2018_v20211215.nc&quot;
-[4] &quot;sos_ORCA1-LIM3-PISCES_D_1_gr_1980-2018_v20211215.nc&quot;
 [1] &quot;sos_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-42.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-51.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>[1] &quot;spco2&quot;
-[1] &quot;spco2_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;
-[2] &quot;spco2_ORCA1-LIM3-PISCES_B_1_gr_1980-2018_v20211215.nc&quot;
-[3] &quot;spco2_ORCA1-LIM3-PISCES_C_1_gr_1980-2018_v20211215.nc&quot;
-[4] &quot;spco2_ORCA1-LIM3-PISCES_D_1_gr_1980-2018_v20211215.nc&quot;
 [1] &quot;spco2_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-43.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-52.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>[1] &quot;tos&quot;
-[1] &quot;tos_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;
-[2] &quot;tos_ORCA1-LIM3-PISCES_B_1_gr_1980-2018_v20211215.nc&quot;
-[3] &quot;tos_ORCA1-LIM3-PISCES_C_1_gr_1980-2018_v20211215.nc&quot;
-[4] &quot;tos_ORCA1-LIM3-PISCES_D_1_gr_1980-2018_v20211215.nc&quot;
 [1] &quot;tos_ORCA1-LIM3-PISCES_A_1_gr_1980-2018_v20211215.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-44.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-53.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>[1] &quot;planktom12_2d_co2_v20220404&quot;
 [1] &quot;A&quot;
 [1] &quot;dissicos&quot; &quot;fgco2&quot;    &quot;sos&quot;      &quot;spco2&quot;    &quot;tos&quot;     
 [1] &quot;dissicos&quot;
-[1] &quot;dissicos_PlankTOM12_A_1_gr_1980-2018_v20220404.nc&quot;
-[2] &quot;dissicos_PlankTOM12_B_1_gr_1980-2018_v20220404.nc&quot;
-[3] &quot;dissicos_PlankTOM12_C_1_gr_1980-2018_v20220404.nc&quot;
-[4] &quot;dissicos_PlankTOM12_D_1_gr_1980-2018_v20220404.nc&quot;
 [1] &quot;dissicos_PlankTOM12_A_1_gr_1980-2018_v20220404.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-45.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-54.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>[1] &quot;fgco2&quot;
- [1] &quot;fgco2_glob_PlankTOM12_A_1_gr_1980-2018_v20220404.csv&quot;
- [2] &quot;fgco2_glob_PlankTOM12_B_1_gr_1980-2018_v20220404.csv&quot;
- [3] &quot;fgco2_glob_PlankTOM12_C_1_gr_1980-2018_v20220404.csv&quot;
- [4] &quot;fgco2_glob_PlankTOM12_D_1_gr_1980-2018_v20220404.csv&quot;
- [5] &quot;fgco2_PlankTOM12_A_1_gr_1980-2018_v20220404.nc&quot;      
- [6] &quot;fgco2_PlankTOM12_B_1_gr_1980-2018_v20220404.nc&quot;      
- [7] &quot;fgco2_PlankTOM12_C_1_gr_1980-2018_v20220404.nc&quot;      
- [8] &quot;fgco2_PlankTOM12_D_1_gr_1980-2018_v20220404.nc&quot;      
- [9] &quot;fgco2_reg_PlankTOM12_A_1_gr_1980-2018_v20220404.csv&quot; 
-[10] &quot;fgco2_reg_PlankTOM12_B_1_gr_1980-2018_v20220404.csv&quot; 
-[11] &quot;fgco2_reg_PlankTOM12_C_1_gr_1980-2018_v20220404.csv&quot; 
-[12] &quot;fgco2_reg_PlankTOM12_D_1_gr_1980-2018_v20220404.csv&quot; 
 [1] &quot;fgco2_PlankTOM12_A_1_gr_1980-2018_v20220404.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-46.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-55.png" width="672" style="display: block; margin: auto;" /><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-56.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>[1] &quot;sos&quot;
-[1] &quot;sos_PlankTOM12_A_1_gr_1980-2018_v20220404.nc&quot;
-[2] &quot;sos_PlankTOM12_B_1_gr_1980-2018_v20220404.nc&quot;
-[3] &quot;sos_PlankTOM12_C_1_gr_1980-2018_v20220404.nc&quot;
-[4] &quot;sos_PlankTOM12_D_1_gr_1980-2018_v20220404.nc&quot;
 [1] &quot;sos_PlankTOM12_A_1_gr_1980-2018_v20220404.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-47.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-57.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>[1] &quot;spco2&quot;
-[1] &quot;spco2_PlankTOM12_A_1_gr_1980-2018_v20220404.nc&quot;
-[2] &quot;spco2_PlankTOM12_B_1_gr_1980-2018_v20220404.n&quot; 
-[3] &quot;spco2_PlankTOM12_C_1_gr_1980-2018_v20220404.nc&quot;
-[4] &quot;spco2_PlankTOM12_D_1_gr_1980-2018_v20220404.n&quot; 
 [1] &quot;spco2_PlankTOM12_A_1_gr_1980-2018_v20220404.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-48.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-58.png" width="672" style="display: block; margin: auto;" /></p>
 <pre><code>[1] &quot;tos&quot;
-[1] &quot;tos_PlankTOM12_A_1_gr_1980-2018_v20220404.nc&quot;
-[2] &quot;tos_PlankTOM12_B_1_gr_1980-2018_v20220404.nc&quot;
-[3] &quot;tos_PlankTOM12_C_1_gr_1980-2018_v20220404.nc&quot;
-[4] &quot;tos_PlankTOM12_D_1_gr_1980-2018_v20220404.nc&quot;
 [1] &quot;tos_PlankTOM12_A_1_gr_1980-2018_v20220404.nc&quot;</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-49.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-59.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>biome_all %&gt;%
   filter(biome == &quot;atlantic_2&quot;) %&gt;%
   mutate(year = as.factor(year)) %&gt;%
@@ -1505,7 +3128,7 @@ jens-daniel-mueller
   geom_path() +
   scale_color_viridis_d() +
   facet_wrap( ~ model, scales = &quot;free_y&quot;)</code></pre>
-<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-50.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_files.Rmd/subset_cmorized_variable_forcing_data-60.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># write raw data file for GLODAP-based subsetting model variables
 biome_all %&gt;%
   write_csv(file = paste(
@@ -1542,11 +3165,11 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] gsw_1.0-6       lubridate_1.8.0 stars_0.5-5     sf_1.0-5       
- [5] abind_1.4-5     patchwork_1.1.1 collapse_1.7.0  forcats_0.5.1  
- [9] stringr_1.4.0   dplyr_1.0.7     purrr_0.3.4     readr_2.1.1    
-[13] tidyr_1.1.4     tibble_3.1.6    ggplot2_3.3.5   tidyverse_1.3.1
-[17] workflowr_1.7.0
+ [1] marelac_2.1.10  shape_1.4.6     gsw_1.0-6       lubridate_1.8.0
+ [5] stars_0.5-5     sf_1.0-5        abind_1.4-5     patchwork_1.1.1
+ [9] collapse_1.7.0  forcats_0.5.1   stringr_1.4.0   dplyr_1.0.7    
+[13] purrr_0.3.4     readr_2.1.1     tidyr_1.1.4     tibble_3.1.6   
+[17] ggplot2_3.3.5   tidyverse_1.3.1 workflowr_1.7.0
 
 loaded via a namespace (and not attached):
  [1] fs_1.5.2           bit64_4.0.5        httr_1.4.2         rprojroot_2.0.2   
@@ -1555,21 +3178,22 @@ loaded via a namespace (and not attached):
 [13] withr_2.4.3        tidyselect_1.1.1   processx_3.5.2     bit_4.0.4         
 [17] compiler_4.1.2     git2r_0.29.0       cli_3.1.1          rvest_1.0.2       
 [21] RNetCDF_2.5-2      xml2_1.3.3         labeling_0.4.2     sass_0.4.0        
-[25] scales_1.1.1       classInt_0.4-3     callr_3.7.0        proxy_0.4-26      
-[29] digest_0.6.29      rmarkdown_2.11     pkgconfig_2.0.3    htmltools_0.5.2   
-[33] dbplyr_2.1.1       fastmap_1.1.0      highr_0.9          rlang_1.0.2       
-[37] readxl_1.3.1       rstudioapi_0.13    PCICt_0.5-4.1      jquerylib_0.1.4   
-[41] generics_0.1.1     farver_2.1.0       jsonlite_1.7.3     vroom_1.5.7       
-[45] magrittr_2.0.1     ncmeta_0.3.0       Rcpp_1.0.8         munsell_0.5.0     
-[49] fansi_1.0.2        lifecycle_1.0.1    stringi_1.7.6      whisker_0.4       
-[53] yaml_2.2.1         grid_4.1.2         parallel_4.1.2     promises_1.2.0.1  
-[57] crayon_1.4.2       haven_2.4.3        hms_1.1.1          knitr_1.37        
-[61] ps_1.6.0           pillar_1.6.4       reprex_2.0.1       glue_1.6.0        
-[65] evaluate_0.14      getPass_0.2-2      modelr_0.1.8       vctrs_0.3.8       
-[69] tzdb_0.2.0         httpuv_1.6.5       cellranger_1.1.0   gtable_0.3.0      
-[73] assertthat_0.2.1   xfun_0.29          lwgeom_0.2-8       broom_0.7.11      
-[77] e1071_1.7-9        later_1.3.0        viridisLite_0.4.0  class_7.3-20      
-[81] units_0.7-2        ellipsis_0.3.2    </code></pre>
+[25] scales_1.1.1       classInt_0.4-3     callr_3.7.0        SolveSAPHE_2.1.0  
+[29] proxy_0.4-26       digest_0.6.29      rmarkdown_2.11     oce_1.5-0         
+[33] pkgconfig_2.0.3    htmltools_0.5.2    highr_0.9          dbplyr_2.1.1      
+[37] fastmap_1.1.0      rlang_1.0.2        readxl_1.3.1       rstudioapi_0.13   
+[41] PCICt_0.5-4.1      farver_2.1.0       jquerylib_0.1.4    generics_0.1.1    
+[45] jsonlite_1.7.3     vroom_1.5.7        magrittr_2.0.1     ncmeta_0.3.0      
+[49] Rcpp_1.0.8         munsell_0.5.0      fansi_1.0.2        lifecycle_1.0.1   
+[53] stringi_1.7.6      whisker_0.4        yaml_2.2.1         grid_4.1.2        
+[57] parallel_4.1.2     promises_1.2.0.1   crayon_1.4.2       haven_2.4.3       
+[61] hms_1.1.1          seacarb_3.3.0      knitr_1.37         ps_1.6.0          
+[65] pillar_1.6.4       reprex_2.0.1       glue_1.6.0         evaluate_0.14     
+[69] getPass_0.2-2      modelr_0.1.8       vctrs_0.3.8        tzdb_0.2.0        
+[73] httpuv_1.6.5       cellranger_1.1.0   gtable_0.3.0       assertthat_0.2.1  
+[77] xfun_0.29          lwgeom_0.2-8       broom_0.7.11       e1071_1.7-9       
+[81] later_1.3.0        viridisLite_0.4.0  class_7.3-20       units_0.7-2       
+[85] ellipsis_0.3.2    </code></pre>
 </div>
 </div>
 
