@@ -1,0 +1,51 @@
+---
+title: "Synopsis"
+author: "Jens Daniel Müller"
+date:  "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  workflowr::wflow_html:
+    number_sections: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r set_options_global, include = FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+```{r define_paths}
+
+path_reccap2 <-
+  "/nfs/kryo/work/updata/reccap2/"
+
+path_synoptic_datasets <-
+  "/nfs/kryo/work/updata/reccap2/synoptic_datasets/"
+
+path_cmorized <-
+  "/nfs/kryo/work/updata/reccap2/Models/2D_CO2/"
+
+path_cmorized_ancillary <-
+  "/nfs/kryo/work/updata/reccap2/Models/Ancillary_data/"
+
+```
+
+```{r load_libraries_specific, include=FALSE}
+library(tidyverse)
+library(collapse)
+library(patchwork)
+library(stars)
+library(lubridate)
+library(gsw)
+library(marelac)
+library(colorspace)
+```
+
+
+```{r set_ggplot_theme_global, include = FALSE}
+theme_set(theme_bw())
+```
+
