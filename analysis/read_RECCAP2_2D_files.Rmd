@@ -12,6 +12,11 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+```{r set_options_global, include = FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
 ```{r define_paths}
 
 path_reccap2 <-
@@ -116,7 +121,7 @@ variables <-
 # models <- models[8]
 
 for (i_model in models) {
-  # i_model <- models[2]
+  # i_model <- models[3]
   print(i_model)
   
   for (i_model_ID in model_IDs) {
@@ -218,14 +223,7 @@ for (i_model in models) {
                  time = TIME)
       }
       
-      
-      if (i_model == "planktom12_2d_co2_v20220404" &
-          i_variable == "po4os") {
-        variable_data_tibble <-
-          variable_data_tibble %>%
-          mutate(po4os = po4os / 100)
-      }
-      
+
       # remove na values
       variable_data_tibble <-
         variable_data_tibble %>%
@@ -242,8 +240,40 @@ for (i_model in models) {
                month = month(time)) %>%
         select(-time)
       
-      
-      # calculate annual average variable
+      # 
+      # # calculate biome average variable
+      # variable_data_tibble_map <-
+      #   variable_data_tibble %>%
+      #   select(-c(month, biome)) %>% 
+      #   fgroup_by(lat, lon, year) %>% {
+      #     add_vars(fgroup_vars(., "unique"),
+      #              amplitude = 
+      #              fmax(., keep.group_vars = FALSE)-
+      #              fmin(., keep.group_vars = FALSE))
+      #   } %>% 
+      #   arrange(year) %>% 
+      #   select(-c(year)) %>% 
+      #   fgroup_by(lat, lon) %>% {
+      #     add_vars(fgroup_vars(., "unique"),
+      #              amplitude_mean <- 
+      #              fmean(., keep.group_vars = FALSE),
+      #              amplitude_change <- 
+      #              flast(., keep.group_vars = FALSE)-
+      #              ffirst(., keep.group_vars = FALSE))
+      #   }
+      # 
+      # print(
+      #   variable_data_tibble_biome_average %>%
+      #     mutate(year = as.factor(year)) %>%
+      #     ggplot(aes(month, !!sym(i_variable), col = year)) +
+      #     geom_path() +
+      #     scale_color_viridis_d() +
+      #     labs(title = i_model) +
+      #     facet_wrap( ~ biome)
+      # )
+      # 
+
+      # calculate biome average variable
       variable_data_tibble_biome_average <-
         variable_data_tibble %>%
         select(-c(lon, lat)) %>% 
@@ -252,6 +282,15 @@ for (i_model in models) {
                    fmean(., keep.group_vars = FALSE))
         }
       
+      print(
+        variable_data_tibble_biome_average %>%
+          mutate(year = as.factor(year)) %>%
+          ggplot(aes(month, !!sym(i_variable), col = year)) +
+          geom_path() +
+          scale_color_viridis_d() +
+          labs(title = i_model) +
+          facet_wrap( ~ biome)
+      )
       
       if (exists("biome_model_ID")) {
         biome_model_ID <-
@@ -263,12 +302,6 @@ for (i_model in models) {
       }
       
       rm(variable_data_tibble_biome_average)
-      
-      # if (i_model == "MRI-ESM2-1_2D_CO2_v20220502" &
-      #     !(i_variable %in% c("dissicos", "fgco2", "spco2"))) {
-      #
-      # }
-      
     }
     
     
@@ -307,7 +340,7 @@ for (i_model in models) {
   
   if (i_model == "CNRM-ESM2-1_2D_CO2_v20211208") {
     biome_product <- biome_product %>%
-      mutate(dissicos = 0)
+      mutate(dissicos = NA)
   }
   
   
@@ -328,14 +361,6 @@ for (i_model in models) {
   i_model <- str_remove(i_model, "2D_CO2_|2D_co2_|2d_co2_")
   
   
-  biome_product %>%
-    ggplot(aes(month, spco2, col = as.factor(year))) +
-    geom_path() +
-    scale_color_viridis_d() +
-    labs(title = i_model) +
-    facet_wrap( ~ biome)
-  
-  
   biome_product <- biome_product %>%
     mutate(model = i_model)
   
@@ -351,14 +376,13 @@ for (i_model in models) {
 
 }
 
-
 biome_all %>%
-  filter(biome == "atlantic_2") %>% 
-  ggplot(aes(month, dissicos, col = as.factor(year))) +
+  filter(biome == "atlantic_2") %>%
+  mutate(year = as.factor(year)) %>%
+  ggplot(aes(month, dissicos, col = year)) +
   geom_path() +
   scale_color_viridis_d() +
-  labs(title = i_model) +
-  facet_wrap(~ model, scales = "free_y")
+  facet_wrap( ~ model, scales = "free_y")
 
 # write raw data file for GLODAP-based subsetting model variables
 biome_all %>%
