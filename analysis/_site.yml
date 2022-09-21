@@ -4,7 +4,13 @@ navbar:
   title: RECCAP2 seasonal cycle
   left:
   - text: Read data
-    href: read_RECCAP2_2D_files.html
+    menu:
+    - text: Models
+      href: read_RECCAP2_2D_models.html
+    - text: Surface CO2
+      href: read_RECCAP2_2D_surface_CO2.html
+  - text: Synopsis
+    href: synopsis.html
   right:
   - icon: fab fa-github
     text: Source code

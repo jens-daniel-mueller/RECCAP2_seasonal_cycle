@@ -26,7 +26,7 @@ path_synoptic_datasets <-
   "/nfs/kryo/work/updata/reccap2/synoptic_datasets/"
 
 path_cmorized <-
-  "/nfs/kryo/work/updata/reccap2/Models/2D_CO2/"
+  "/nfs/kryo/work/updata/reccap2/Surface_CO2/"
 
 path_cmorized_ancillary <-
   "/nfs/kryo/work/updata/reccap2/Models/Ancillary_data/"
@@ -96,8 +96,7 @@ models <-
   models[str_detect(
     models,
     pattern = c(
-      "CESM|CNRM|EC-Earth3|FESOM_REcoM_LR|MOM6-Princeton|MRI-ESM2-1|NorESM-OC1.2|ORCA025-GEOMAR|ORCA1-LIM3-PISCES|planktom12"
-    )
+      "CMEMS|CSIRML6|JenaMLS|JMAMLR|NIES-ML3|OceanSODAETHZ|SOMFFN|spco2_LDEO_HPD_1985-2018|UOEX_Wat20_1985_2019")
   )]
 
 # # no run D
@@ -109,10 +108,8 @@ models <-
 
 # Extract surface data
 
-```{r subset_cmorized_variable_forcing_data, eval=FALSE}
+```{r subset_cmorized_variable_forcing_data}
 
-# set name of model to be subsetted
-model_IDs <- c("A")
 
 # for loop across variables
 variables <-
@@ -125,291 +122,242 @@ variables <-
 
 # models <- models[8]
 
+
 for (i_model in models) {
-  # i_model <- models[1]
+  # i_model <- models[9]
   print(i_model)
   
-  for (i_model_ID in model_IDs) {
-    # i_model_ID <- model_IDs[1]
-    print(i_model_ID)
+  variables_available <-
+    list.files(path = paste0(path_cmorized, i_model))
+  
+  variables_available <-
+    str_split(variables_available,
+              pattern = "_",
+              simplify = TRUE)[, 1]
+  
+  variables_available <-
+    variables_available[variables_available %in% variables]
+  
+  variables_available <- unique(variables_available)
+  
+  print(variables_available)
+  
+  for (i_variable in variables_available) {
+    # i_variable <- variables_available[1]
+    print(i_variable)
     
-    variables_available <-
-      list.files(
-        path = paste0(path_cmorized, i_model),
-        pattern = paste0("_", i_model_ID, "_")
-      )
+    # print("sleep")
+    Sys.sleep(1)
     
-    variables_available <-
-      str_split(variables_available,
-                pattern = "_",
-                simplify = TRUE)[, 1]
+    # read list of all files
+    file <-
+      list.files(path = paste0(path_cmorized, i_model),
+                 pattern = i_variable)
     
-    variables_available <-
-      variables_available[variables_available %in% variables]
+    # print(file)
     
-    variables_available <- unique(variables_available)
+    file <- file[!str_detect(file, pattern = "_reg")]
+    file <- file[!str_detect(file, pattern = "_glob")]
+    file <- file[!str_detect(file, pattern = "dissicnatos")]
+    file <- file[!str_detect(file, pattern = "ensemble")]
     
-    print(variables_available)
+    print(file)
     
-    
-    for (i_variable in variables_available) {
-      # i_variable <- variables_available[4]
-      print(i_variable)
-      
-      # print("sleep")
-      Sys.sleep(1)
-      
-      # read list of all files
-      file <-
-        list.files(
-          path = paste0(path_cmorized, i_model),
-          pattern = paste0(i_variable, "_")
-        )
-      
-      # print(file)
-      
-      file <-
-        file[str_detect(file, pattern = paste0("_", i_model_ID, "_"))]
-      
-      file <- file[!str_detect(file, pattern = "_reg")]
-      file <- file[!str_detect(file, pattern = "_glob")]
-      file <- file[!str_detect(file, pattern = "dissicnatos")]
-      
-      print(file)
-      
-      # read in data
-      if (i_model %in% c("EC-Earth3_2D_CO2_v20220323")) {
-        variable_data <-
-          read_ncdf(paste(paste0(path_cmorized, i_model),
-                          file,
-                          sep = "/"),
-                    make_units = FALSE,
-                    make_time = FALSE) %>%
-          as_tibble()
-        
-        variable_data <- variable_data  %>%
-          mutate(time = as.Date(time, origin = "1850-02-15"))
-        
-      } else {
-        variable_data <-
-          read_ncdf(paste(paste0(path_cmorized, i_model),
-                          file,
-                          sep = "/"),
-                    make_units = FALSE)
-        
-      }
-      
-      
-      # convert to tibble
-      variable_data_tibble <- variable_data %>%
+    # read in data
+    if (i_model %in% c("EC-Earth3_2D_CO2_v20220323")) {
+      variable_data <-
+        read_ncdf(paste(paste0(path_cmorized, i_model),
+                        file,
+                        sep = "/"),
+                  make_units = FALSE,
+                  make_time = FALSE) %>%
         as_tibble()
       
-      # remove open link to nc file
-      rm(variable_data)
+      variable_data <- variable_data  %>%
+        mutate(time = as.Date(time, origin = "1850-02-15"))
       
+    } else {
+      variable_data <-
+        read_ncdf(paste(paste0(path_cmorized, i_model),
+                        file,
+                        sep = "/"),
+                  make_units = FALSE)
       
-      if (i_model == "CESM-ETHZ_2D_CO2_v20211122") {
-        variable_data_tibble <- variable_data_tibble %>%
-          rename(time = time_mon)
-      }
-      
-      if (i_model == "FESOM_REcoM_LR_2D_CO2_v20211119") {
-        variable_data_tibble <- variable_data_tibble %>%
-          rename(lat = Lat,
-                 lon = Lon,
-                 time = Time) %>%
-          mutate(time = as.Date(time, origin = '1980-01-01'))
-      }
-      
-      if (i_model == "planktom12_2d_co2_v20220404") {
-        variable_data_tibble <- variable_data_tibble %>%
-          rename(lon = LONGITUDE,
-                 lat = LATITUDE,
-                 time = TIME)
-      }
-      
-
-      # remove na values
-      variable_data_tibble <-
-        variable_data_tibble %>%
-        drop_na()
-      
-      
-      # only consider model grids within basinmask
-      variable_data_tibble <-
-        inner_join(variable_data_tibble, region_masks_all)
-      
-      # mutate variables
+    }
+    
+    
+    # convert to tibble
+    variable_data_tibble <- variable_data %>%
+      as_tibble()
+    
+    # remove open link to nc file
+    rm(variable_data)
+    
+    
+    if (i_model == "CESM-ETHZ_2D_CO2_v20211122") {
       variable_data_tibble <- variable_data_tibble %>%
-        mutate(year = year(time),
-               month = month(time)) %>%
-        select(-time)
-      
+        rename(time = time_mon)
+    }
+    
+    if (i_model == "CMEMS-LSCE-FFNN_v20210709") {
+      variable_data_tibble <- variable_data_tibble %>%
+        rename(lon = longitude,
+               lat = latitude)
+    }
 
-      # calculate biome average variable
-      variable_data_tibble_map <-
+    if (i_model == "spco2_LDEO_HPD_1985-2018_v20211210") {
+      variable_data_tibble <- variable_data_tibble %>%
+        mutate(time = as.Date(time, origin = "1980-01-01"))
+    }
+
+    if (i_model == "UOEX_Wat20_1985_2019_v20211204") {
+      variable_data_tibble <- variable_data_tibble %>%
+        mutate(time = as.Date(time, origin = "1980-01-01"))
+    }
+    
+    
+    # remove na values
+    variable_data_tibble <-
+      variable_data_tibble %>%
+      drop_na()
+    
+    
+    # only consider model grids within basinmask
+    variable_data_tibble <-
+      inner_join(variable_data_tibble, region_masks_all)
+    
+    # mutate variables
+    variable_data_tibble <- variable_data_tibble %>%
+      mutate(year = year(time),
+             month = month(time)) %>%
+      select(-time)
+    
+    
+    # calculate biome average variable
+    variable_data_tibble_map <-
+      variable_data_tibble %>%
+      select(-c(month, biome)) %>%
+      group_by(lat, lon, year) %>%
+      summarise(amplitude =
+                  max(!!sym(i_variable)) -
+                  min(!!sym(i_variable))) %>%
+      ungroup() %>%
+      arrange(year) %>%
+      select(-c(year)) %>%
+      group_by(lat, lon) %>%
+      summarise(
+        amplitude_mean = mean(amplitude),
+        amplitude_change = last(amplitude) - first(amplitude)
+      ) %>%
+      ungroup()
+    
+    print(
+      variable_data_tibble_map %>%
+        ggplot(aes(lon, lat, fill = amplitude_mean)) +
+        geom_raster() +
+        scale_fill_viridis_c(name = paste(i_variable, "\namplitude")) +
+        labs(title = i_model) +
+        coord_quickmap(expand = 0)
+    )
+    
+    print(
+      variable_data_tibble_map %>%
+        ggplot(aes(lon, lat, fill = amplitude_change)) +
+        geom_raster() +
+        scale_fill_continuous_divergingx(
+          palette = "Spectral",
+          name = paste(i_variable, "\namplitude\nchange"),
+          rev = TRUE
+        ) +
+        labs(title = i_model) +
+        coord_quickmap(expand = 0)
+    )
+    
+    
+    # calculate area-weighted average per biome
+    variable_data_tibble_biome_average <-
+      variable_data_tibble %>%
+      select(-c(lon, lat)) %>%
+      group_by(year, month, biome) %>%
+      summarise(!!sym(i_variable) := weighted.mean(x = !!sym(i_variable),
+                                                   w = area)) %>%
+      ungroup()
+    
+    
+    if (i_variable == "fgco2") {
+      fgco2_reg <-
         variable_data_tibble %>%
-        select(-c(month, biome)) %>%
-        group_by(lat, lon, year) %>%
-        summarise(amplitude =
-                    max(!!sym(i_variable)) -
-                    min(!!sym(i_variable))) %>%
-        ungroup() %>%
-        arrange(year) %>%
-        select(-c(year)) %>%
-        group_by(lat, lon) %>%
-        summarise(
-          amplitude_mean = mean(amplitude),
-          amplitude_change = last(amplitude) - first(amplitude)
-        ) %>%
-        ungroup()
-
-      print(
-        variable_data_tibble_map %>%
-          ggplot(aes(lon, lat, fill = amplitude_mean)) +
-          geom_raster() +
-          scale_fill_viridis_c(name = paste(i_variable, "\namplitude")) +
-          labs(title = i_model) +
-          coord_quickmap(expand = 0)
-      )
-
-      print(
-        variable_data_tibble_map %>%
-          ggplot(aes(lon, lat, fill = amplitude_change)) +
-          geom_raster() +
-          scale_fill_continuous_divergingx(
-            palette = "Spectral",
-            name = paste(i_variable, "\namplitude\nchange"),
-            rev = TRUE) +
-          labs(title = i_model) +
-          coord_quickmap(expand = 0)
-      )
-
-
-      # calculate area-weighted average per biome
-      variable_data_tibble_biome_average <-
-        variable_data_tibble %>%
-        select(-c(lon, lat)) %>% 
+        select(-c(lon, lat)) %>%
+        mutate(fgco2 = -fgco2 * area) %>%
         group_by(year, month, biome) %>%
-        summarise(!!sym(i_variable) := weighted.mean(x = !!sym(i_variable),
-                                                     w = area)) %>% 
+        summarise(fgco2_reg := sum(fgco2)) %>%
         ungroup()
-
       
-      if (i_variable == "fgco2") {
-        fgco2_reg <-
-          variable_data_tibble %>%
-          select(-c(lon, lat)) %>%
-          mutate(fgco2 = -fgco2 * area) %>%
-          group_by(year, month, biome) %>%
-          summarise(fgco2_reg := sum(fgco2)) %>%
-          ungroup()
-        
-        fgco2_reg <- fgco2_reg %>% 
-          mutate(fgco2_reg = fgco2_reg * (365.25 * 24 * 60 * 60 * 12.011 * 1e-15))
-        
-        variable_data_tibble_biome_average <-
-          variable_data_tibble_biome_average %>% 
-          mutate(fgco2 = -fgco2 * (365.25 * 24 * 60 * 60))
-        
-        variable_data_tibble_biome_average <-
-          left_join(variable_data_tibble_biome_average,
-                    fgco2_reg)
-        
-        print(
-          variable_data_tibble_biome_average %>%
-            mutate(year = as.factor(year)) %>%
-            ggplot(aes(month, fgco2_reg, col = year)) +
-            geom_hline(yintercept = 0) +
-            geom_path() +
-            scale_color_viridis_d() +
-            labs(title = i_model) +
-            facet_wrap(~ biome)
-        )
-        
-      }
+      fgco2_reg <- fgco2_reg %>%
+        mutate(fgco2_reg = fgco2_reg * (365.25 * 24 * 60 * 60 * 12.011 * 1e-15))
       
-            
+      variable_data_tibble_biome_average <-
+        variable_data_tibble_biome_average %>%
+        mutate(fgco2 = -fgco2 * (365.25 * 24 * 60 * 60))
+      
+      variable_data_tibble_biome_average <-
+        left_join(variable_data_tibble_biome_average,
+                  fgco2_reg)
+      
       print(
         variable_data_tibble_biome_average %>%
           mutate(year = as.factor(year)) %>%
-          ggplot(aes(month, !!sym(i_variable), col = year)) +
+          ggplot(aes(month, fgco2_reg, col = year)) +
+          geom_hline(yintercept = 0) +
           geom_path() +
           scale_color_viridis_d() +
           labs(title = i_model) +
           facet_wrap( ~ biome)
       )
       
-      
-      if (exists("biome_model_ID")) {
-        biome_model_ID <-
-          left_join(biome_model_ID, variable_data_tibble_biome_average)
-      }
-      
-      if (!exists("biome_model_ID")) {
-        biome_model_ID <- variable_data_tibble_biome_average
-      }
-      
-      rm(variable_data_tibble_biome_average)
     }
     
     
-    # if (i_model == "FESOM_REcoM_LR_2D_CO2_v20211119") {
-    #   annual <- annual %>%
-    #     mutate(po4os = no3os / 16)
-    # }
+    print(
+      variable_data_tibble_biome_average %>%
+        mutate(year = as.factor(year)) %>%
+        ggplot(aes(month, !!sym(i_variable), col = year)) +
+        geom_path() +
+        scale_color_viridis_d() +
+        labs(title = i_model) +
+        facet_wrap(~ biome)
+    )
     
-    # if (i_model == "planktom12_3d_all_v20220404") {
-    #   annual <- annual %>%
-    #     mutate(no3os = po4os * 16)
-    # }
-    
-    # if (i_model == "MRI-ESM2-1_2D_CO2_v20220502" &
-    #     i_model_ID == "D") {
-    #   annual <- right_join(annual,
-    #                        AD_annual %>%
-    #                          select(-c(dissicos, fgco2, spco2, model_ID)))
-    # }
-    
-    biome_model_ID <- biome_model_ID %>%
-      mutate(model_ID = i_model_ID)
     
     if (exists("biome_product")) {
-      biome_product <- bind_rows(biome_product, biome_model_ID)
+      biome_product <-
+        left_join(biome_product, variable_data_tibble_biome_average)
     }
     
     if (!exists("biome_product")) {
-      biome_product <- biome_model_ID
+      biome_product <- variable_data_tibble_biome_average
     }
     
-    rm(biome_model_ID)
-    
+    rm(variable_data_tibble_biome_average)
     
   }
   
-  if (i_model == "CNRM-ESM2-1_2D_CO2_v20211208") {
+  if (i_model == "OceanSODAETHZ_v20211207") {
+    # unit transfer from mol/m3 to µmol/kg
     biome_product <- biome_product %>%
-      mutate(dissicos = NA)
-  }
-  
-  
-  # unit transfer from mol/m3 to µmol/kg
-  biome_product <- biome_product %>%
-    mutate(
-      rho = gsw_pot_rho_t_exact(
-        SA = sos,
-        t = tos,
-        p = 0,
-        p_ref = 10.1325
-      ),
-      dissicos = dissicos * (1e+6 / rho)
-    ) %>%
-    select(-rho)
-  
-  
-  i_model <- str_remove(i_model, "2D_CO2_|2D_co2_|2d_co2_")
-  
-  
+      mutate(
+        rho = gsw_pot_rho_t_exact(
+          SA = sos,
+          t = tos,
+          p = 0,
+          p_ref = 10.1325
+        ),
+        dissicos = dissicos * (1e+6 / rho)
+      ) %>%
+      select(-rho)
+    
+    }
+
   biome_product <- biome_product %>%
     mutate(model = i_model)
   
@@ -422,7 +370,7 @@ for (i_model in models) {
   }
   
   rm(biome_product)
-
+  
 }
 
 biome_all %>%
@@ -435,11 +383,13 @@ biome_all %>%
 
 # write raw data file for GLODAP-based subsetting model variables
 biome_all %>%
-  write_csv(file = paste(
-    path_synoptic_datasets,
-    "models_surface_biome_averages",
-    ".csv",
-    sep = ""
-  ))
+  write_csv(
+    file = paste(
+      path_synoptic_datasets,
+      "surface_co2_surface_biome_averages",
+      ".csv",
+      sep = ""
+    )
+  )
 
 ```
