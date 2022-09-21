@@ -52,6 +52,17 @@ theme_set(theme_bw())
 
 # Read region mask
 
+```{r read_labels, eval=FALSE}
+library(ncdf4)
+region_masks_all <-
+  nc_open(paste(path_reccap2, "RECCAP2_region_masks_all_v20220620.nc", sep = ""))
+
+region_masks_all
+ncatt_get(region_masks_all, "open_ocean")
+
+```
+
+
 ```{r region_mask}
 
 region_masks_all <-
