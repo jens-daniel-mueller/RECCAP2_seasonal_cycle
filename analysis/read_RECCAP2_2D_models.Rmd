@@ -245,7 +245,12 @@ for (i_model in models) {
                month = month(time)) %>%
         select(-time)
       
-
+      
+      # restrict years
+      variable_data_tibble <- variable_data_tibble %>%
+        filter(year >= 1985,
+               year <= 2018)
+      
       # calculate biome average variable
       variable_data_tibble_map <-
         variable_data_tibble %>%

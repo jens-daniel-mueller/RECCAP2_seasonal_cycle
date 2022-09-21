@@ -88,6 +88,7 @@ region_masks_all <- region_masks_all %>%
 
 
 models <- list.files(path_cmorized)
+# print(models)
 
 models <-
   models[!str_detect(models, pattern = "\\.t|\\.z")]
@@ -95,9 +96,7 @@ models <-
 models <-
   models[str_detect(
     models,
-    pattern = c(
-      "CMEMS|CSIRML6|JenaMLS|JMAMLR|NIES-ML3|OceanSODAETHZ|SOMFFN|spco2_LDEO_HPD_1985-2018|UOEX_Wat20_1985_2019")
-  )]
+    pattern = "CMEMS|CSIRML6|JenaMLS|JMAMLR|NIES-ML3|OceanSODAETHZ|SOMFFN|spco2_LDEO_HPD_1985-2018|UOEX_Wat20_1985_2019")]
 
 # # no run D
 # models <-
@@ -118,10 +117,6 @@ variables <-
     "dissicos",
     "tos",
     "sos")
-
-
-# models <- models[8]
-
 
 for (i_model in models) {
   # i_model <- models[9]
@@ -164,7 +159,7 @@ for (i_model in models) {
     print(file)
     
     # read in data
-    if (i_model %in% c("EC-Earth3_2D_CO2_v20220323")) {
+    if (i_model %in% c("SOMFFN_v20211121")) {
       variable_data <-
         read_ncdf(paste(paste0(path_cmorized, i_model),
                         file,
@@ -173,8 +168,14 @@ for (i_model in models) {
                   make_time = FALSE) %>%
         as_tibble()
       
-      variable_data <- variable_data  %>%
-        mutate(time = as.Date(time, origin = "1850-02-15"))
+      variable_data <- variable_data %>%
+        mutate(time = as.Date(as.POSIXct(time,
+                                         origin = "1980-01-15")),
+               !!sym(i_variable) := if_else(!!sym(i_variable) == -999,
+                                            NaN,
+                                            !!sym(i_variable))) %>%
+        select(-ends_with("raw"))
+      
       
     } else {
       variable_data <-
@@ -231,7 +232,11 @@ for (i_model in models) {
       mutate(year = year(time),
              month = month(time)) %>%
       select(-time)
-    
+
+    # restrict years
+    variable_data_tibble <- variable_data_tibble %>%
+      filter(year >= 1985,
+             year <= 2018)
     
     # calculate biome average variable
     variable_data_tibble_map <-
