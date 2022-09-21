@@ -40,6 +40,7 @@ library(patchwork)
 library(stars)
 library(lubridate)
 library(gsw)
+library(marelac)
 ```
 
 
@@ -76,6 +77,9 @@ region_masks_all %>%
   ggplot(aes(lon, lat, fill = biome)) +
   geom_raster() +
   coord_quickmap(expand = 0)
+
+region_masks_all <- region_masks_all %>% 
+    mutate(area = earth_surf(lat = lat))
 
 ```
 
@@ -121,7 +125,7 @@ variables <-
 # models <- models[8]
 
 for (i_model in models) {
-  # i_model <- models[3]
+  # i_model <- models[1]
   print(i_model)
   
   for (i_model_ID in model_IDs) {
@@ -161,7 +165,7 @@ for (i_model in models) {
           pattern = paste0(i_variable, "_")
         )
       
-      print(file)
+      # print(file)
       
       file <-
         file[str_detect(file, pattern = paste0("_", i_model_ID, "_"))]
@@ -273,14 +277,14 @@ for (i_model in models) {
       # )
       # 
 
-      # calculate biome average variable
+      # calculate area-weighted average per biome
       variable_data_tibble_biome_average <-
         variable_data_tibble %>%
         select(-c(lon, lat)) %>% 
-        fgroup_by(year, month, biome) %>% {
-          add_vars(fgroup_vars(., "unique"),
-                   fmean(., keep.group_vars = FALSE))
-        }
+        group_by(year, month, biome) %>%
+        summarise(!!sym(i_variable) := weighted.mean(x = !!sym(i_variable),
+                                                     w = area)) %>% 
+        ungroup()
       
       print(
         variable_data_tibble_biome_average %>%
@@ -291,6 +295,36 @@ for (i_model in models) {
           labs(title = i_model) +
           facet_wrap( ~ biome)
       )
+      
+      if (i_variable == "fgco2") {
+        fgco2_reg <-
+          variable_data_tibble %>%
+          select(-c(lon, lat)) %>%
+          mutate(fgco2 = fgco2 * area) %>%
+          group_by(year, month, biome) %>%
+          summarise(fgco2_reg := sum(fgco2)) %>%
+          ungroup()
+        
+        fgco2_reg <- fgco2_reg %>% 
+          mutate(fgco2_reg = fgco2_reg * (365.25 * 24 * 60 * 60 * 12.011))
+        
+        variable_data_tibble_biome_average <-
+          left_join(variable_data_tibble_biome_average,
+                    fgco2_reg)
+        
+        print(
+          variable_data_tibble_biome_average %>%
+            mutate(year = as.factor(year)) %>%
+            ggplot(aes(month, fgco2_reg, col = year)) +
+            geom_hline(yintercept = 0) +
+            geom_path() +
+            scale_color_viridis_d() +
+            labs(title = i_model) +
+            facet_wrap(~ biome)
+        )
+        
+      }
+      
       
       if (exists("biome_model_ID")) {
         biome_model_ID <-
