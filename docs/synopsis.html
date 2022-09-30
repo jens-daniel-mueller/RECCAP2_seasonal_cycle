@@ -393,7 +393,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Synopsis</h1>
 <h4 class="author">Jens Daniel Müller</h4>
-<h4 class="date">22 September, 2022</h4>
+<h4 class="date">30 September, 2022</h4>
 
 </div>
 
@@ -418,7 +418,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-09-22
+<strong>Last updated:</strong> 2022-09-30
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -509,16 +509,16 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree48e937c43375856bf829bfa767eaf7e594543094targetblank48e937ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/48e937c43375856bf829bfa767eaf7e594543094" target="_blank">48e937c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree91fc767b8101575c7ae60683b97aa6fd9b9ab035targetblank91fc767a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/91fc767b8101575c7ae60683b97aa6fd9b9ab035" target="_blank">91fc767</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree48e937c43375856bf829bfa767eaf7e594543094targetblank48e937ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree91fc767b8101575c7ae60683b97aa6fd9b9ab035targetblank91fc767a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/48e937c43375856bf829bfa767eaf7e594543094" target="_blank">48e937c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/91fc767b8101575c7ae60683b97aa6fd9b9ab035" target="_blank">91fc767</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -568,6 +568,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/91fc767b8101575c7ae60683b97aa6fd9b9ab035/analysis/synopsis.Rmd" target="_blank">91fc767</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-30
+</td>
+<td>
+started CO2 vs SST cycles
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/fa346fafe458884c487ce3025e2e9718220f53a6/docs/synopsis.html" target="_blank">fa346fa</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-09-22
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -631,12 +665,14 @@ started surface CO2 read-in
 
 path_synoptic_datasets &lt;-
   &quot;/nfs/kryo/work/updata/reccap2/synoptic_datasets/&quot;</code></pre>
-<p>byte open_ocean[lon,lat] (Contiguous storage)<br />
-region_name: 1.Atlantic, 2.Pacific, 3.Indian, 4.Arctic, 5.Southern byte atlantic[lon,lat] (Contiguous storage)<br />
-region_name: 1.NA SPSS, 2.NA STSS, 3.NA STPS, 4.AEQU, 5.SA STPS, 6.MED (not in FM14) byte pacific[lon,lat] (Contiguous storage)<br />
-region_name: 1.NP SPSS, 2.NP STSS, 3.NP STPS, 4.PEQU-W, 5.PEQU-E, 6.SP STPS byte indian[lon,lat] (Contiguous storage)<br />
-region_name: 1.Arabian Sea, 2.Bay of Bengal, 3.Equatorial Indian, 4.Southern Indian byte arctic[lon,lat] (Contiguous storage)<br />
-region_name: 1.ARCTIC ICE (not in FM14), 2.NP ICE, 3.NA ICE, 4.Barents (not in FM14) byte southern[lon,lat] (Contiguous storage)<br />
+<div id="read-data" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Read data</h1>
+<p>region_name: 1.Atlantic, 2.Pacific, 3.Indian, 4.Arctic, 5.Southern</p>
+<p>atlantic<br />
+region_name: 1.NA SPSS, 2.NA STSS, 3.NA STPS, 4.AEQU, 5.SA STPS, 6.MED (not in FM14) pacific<br />
+region_name: 1.NP SPSS, 2.NP STSS, 3.NP STPS, 4.PEQU-W, 5.PEQU-E, 6.SP STPS indian<br />
+region_name: 1.Arabian Sea, 2.Bay of Bengal, 3.Equatorial Indian, 4.Southern Indian arctic<br />
+region_name: 1.ARCTIC ICE (not in FM14), 2.NP ICE, 3.NA ICE, 4.Barents (not in FM14) southern<br />
 region_name: 1.SO STSS, 2.SO SPSS, 3.SO ICE</p>
 <pre class="r"><code>surface_co2 &lt;-
   read_csv(
@@ -669,14 +705,89 @@ biome_averages &lt;- bind_rows(
 biome_averages &lt;- biome_averages  %&gt;% 
   mutate(biome = case_when(
     biome == &quot;atlantic_1&quot; ~ &quot;NA SPSS&quot;,
+    biome == &quot;atlantic_2&quot; ~ &quot;NA STSS&quot;,
     biome == &quot;atlantic_3&quot; ~ &quot;NA STPS&quot;,
+    biome == &quot;atlantic_4&quot; ~ &quot;AEQU&quot;,
+    biome == &quot;atlantic_5&quot; ~ &quot;SA STPS&quot;,
+    biome == &quot;atlantic_6&quot; ~ &quot;MED&quot;,
+    biome == &quot;pacific_1&quot; ~ &quot;NP SPSS&quot;,
+    biome == &quot;pacific_2&quot; ~ &quot;NP STSS&quot;,
+    biome == &quot;pacific_3&quot; ~ &quot;NP STPS&quot;,
+    biome == &quot;pacific_4&quot; ~ &quot;PEQU-E&quot;,
+    biome == &quot;pacific_5&quot; ~ &quot;PEQU-W&quot;,
+    biome == &quot;pacific_6&quot; ~ &quot;SP STSS&quot;,
+    biome == &quot;indian_1&quot; ~ &quot;Arabian Sea&quot;,
+    biome == &quot;indian_2&quot; ~ &quot;Bay of Bengal&quot;,
+    biome == &quot;indian_3&quot; ~ &quot;Equatorial Indian&quot;,
+    biome == &quot;indian_4&quot; ~ &quot;Southern Indian&quot;,
+    biome == &quot;arctic_1&quot; ~ &quot;ARCTIC ICE&quot;,
+    biome == &quot;arctic_2&quot; ~ &quot;NP ICE&quot;,
+    biome == &quot;arctic_3&quot; ~ &quot;NA ICE&quot;,
+    biome == &quot;arctic_4&quot; ~ &quot;Barents&quot;,
     biome == &quot;southern_1&quot; ~ &quot;SO STSS&quot;,
     biome == &quot;southern_2&quot; ~ &quot;SO SPSS&quot;,
+    biome == &quot;southern_3&quot; ~ &quot;SO ICE&quot;,
     TRUE ~ &quot;other&quot;
-  )) %&gt;% 
-  filter(biome != &quot;other&quot;)
+  ))</code></pre>
+</div>
+<div id="filter-biomes" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Filter biomes</h1>
+<pre class="r"><code>biome_averages &lt;- biome_averages  %&gt;%
+  filter(biome %in% c(&quot;NA SPSS&quot;,
+                      &quot;NA STPS&quot;,
+                      &quot;SO STSS&quot;,
+                      &quot;SO SPSS&quot;))
 
-amplitudes &lt;-
+biome_averages &lt;- biome_averages %&gt;% 
+  mutate(date = paste(year,sprintf(&quot;%02d&quot;,month),&quot;15&quot;, sep = &quot;-&quot;),
+         date = as.Date(date, format = &quot;%Y-%m-%d&quot;))</code></pre>
+</div>
+<div id="pco2---sst-circles" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> pCO2 - SST circles</h1>
+<pre class="r"><code>biome_average_class &lt;- biome_averages %&gt;%
+  group_by(biome, month, class) %&gt;%
+  summarise(across(c(&quot;spco2&quot;, &quot;tos&quot;), list(mean = mean, sd = sd), na.rm = TRUE)) %&gt;%
+  ungroup()
+
+biome_average_class %&gt;% 
+  ggplot(aes(tos_mean, spco2_mean, col = class)) +
+  geom_path() +
+  geom_point() +
+  facet_wrap(~biome)</code></pre>
+<p><img src="figure/synopsis.Rmd/pCO2_sst_circles-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>biome_average_class_model &lt;- biome_averages %&gt;%
+  group_by(biome, month, class, model) %&gt;%
+  summarise(across(c(&quot;spco2&quot;, &quot;dissicos&quot;, &quot;tos&quot;), list(mean = mean, sd = sd), na.rm = TRUE)) %&gt;%
+  ungroup()
+
+biome_average_class_model %&gt;% 
+  ggplot(aes(tos_mean, spco2_mean, col = class, group = model)) +
+  geom_path() +
+  # geom_point() +
+  facet_wrap(~biome)</code></pre>
+<p><img src="figure/synopsis.Rmd/pCO2_sst_circles-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>biome_average_class_model %&gt;% 
+  ggplot(aes(tos_mean, dissicos_mean, col = class, group = model)) +
+  geom_path() +
+  # geom_point() +
+  facet_wrap(~biome)</code></pre>
+<p><img src="figure/synopsis.Rmd/pCO2_sst_circles-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>biome_average_class_year &lt;- biome_averages %&gt;%
+  group_by(biome, date, class) %&gt;%
+  summarise(across(c(&quot;spco2&quot;, &quot;tos&quot;), list(mean = mean, sd = sd), na.rm = TRUE)) %&gt;%
+  ungroup()
+
+biome_average_class_year %&gt;% 
+  ggplot(aes(tos_mean, spco2_mean, col = date)) +
+  geom_path() +
+  scale_color_viridis_c() +
+  # geom_point() +
+  facet_grid(class~biome, scales = &quot;free&quot;)</code></pre>
+<p><img src="figure/synopsis.Rmd/pCO2_sst_circles-4.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="seasonal-amplitude-time-series" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Seasonal amplitude time series</h1>
+<pre class="r"><code>amplitudes &lt;-
   biome_averages %&gt;%
   select(year, month, biome, class, model, fgco2, fgco2_reg, spco2) %&gt;% 
   pivot_longer(fgco2:spco2,
@@ -688,8 +799,28 @@ amplitudes &lt;-
             amplitude = max - min) %&gt;%
   ungroup()
 
-
-pdf(&quot;output/amplitude_time_series.pdf&quot;,
+amplitudes %&gt;%
+  group_split(parameter) %&gt;%
+  # head(1) %&gt;% 
+  map(
+    ~ ggplot(data = .x,
+             aes(year, amplitude)) +
+      geom_path(aes(col = model)) +
+      geom_smooth(method = &quot;lm&quot;, col=&quot;black&quot;, se=FALSE) +
+      labs(y = .x$parameter,
+           title = &quot;Seasonal amplitude (annual max - min)&quot;) +
+      scale_color_discrete(name = &quot;product&quot;) +
+      facet_grid(biome ~ class, scales = &quot;free_y&quot;)
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
+<p><img src="figure/synopsis.Rmd/amplitude_time_series-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[2]]</code></pre>
+<p><img src="figure/synopsis.Rmd/amplitude_time_series-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[3]]</code></pre>
+<p><img src="figure/synopsis.Rmd/amplitude_time_series-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pdf(&quot;output/amplitude_time_series.pdf&quot;,
     width = 10,
     height = 10)
 amplitudes %&gt;%
@@ -713,6 +844,31 @@ amplitudes %&gt;%
 <pre class="r"><code>dev.off()</code></pre>
 <pre><code>png 
   2 </code></pre>
+<pre class="r"><code>amplitudes %&gt;%
+  select(-amplitude) %&gt;%
+  pivot_longer(min:max,
+               names_to = &quot;extreme&quot;,
+               values_to = &quot;value&quot;) %&gt;%
+  group_split(parameter) %&gt;%
+  # head(1) %&gt;%
+  map(
+    ~ ggplot(data = .x,
+             aes(year, value, linetype = extreme)) +
+      geom_path(aes(col = model)) +
+      geom_smooth(method = &quot;lm&quot;, col = &quot;black&quot;, se = FALSE) +
+      labs(y = .x$parameter,
+           title = &quot;Annual max &amp; min&quot;) +
+      scale_color_discrete(name = &quot;product&quot;) +
+      facet_grid(biome ~ class, scales = &quot;free_y&quot;)
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
+<p><img src="figure/synopsis.Rmd/amplitude_time_series-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[2]]</code></pre>
+<p><img src="figure/synopsis.Rmd/amplitude_time_series-5.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[3]]</code></pre>
+<p><img src="figure/synopsis.Rmd/amplitude_time_series-6.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>pdf(&quot;output/min_max_time_series.pdf&quot;,
     width = 10,
     height = 10)
@@ -784,19 +940,21 @@ loaded via a namespace (and not attached):
 [21] rvest_1.0.2        xml2_1.3.3         labeling_0.4.2     sass_0.4.0        
 [25] scales_1.1.1       classInt_0.4-3     callr_3.7.0        SolveSAPHE_2.1.0  
 [29] proxy_0.4-26       digest_0.6.29      rmarkdown_2.11     oce_1.5-0         
-[33] pkgconfig_2.0.3    htmltools_0.5.2    dbplyr_2.1.1       fastmap_1.1.0     
-[37] rlang_1.0.2        readxl_1.3.1       rstudioapi_0.13    farver_2.1.0      
-[41] jquerylib_0.1.4    generics_0.1.1     jsonlite_1.7.3     vroom_1.5.7       
-[45] magrittr_2.0.1     Matrix_1.4-0       Rcpp_1.0.8         munsell_0.5.0     
-[49] fansi_1.0.2        lifecycle_1.0.1    stringi_1.7.6      whisker_0.4       
-[53] yaml_2.2.1         grid_4.1.2         parallel_4.1.2     promises_1.2.0.1  
-[57] crayon_1.4.2       lattice_0.20-45    splines_4.1.2      haven_2.4.3       
-[61] hms_1.1.1          seacarb_3.3.0      knitr_1.37         ps_1.6.0          
-[65] pillar_1.6.4       reprex_2.0.1       glue_1.6.0         evaluate_0.14     
-[69] getPass_0.2-2      modelr_0.1.8       vctrs_0.3.8        tzdb_0.2.0        
-[73] httpuv_1.6.5       cellranger_1.1.0   gtable_0.3.0       assertthat_0.2.1  
-[77] xfun_0.29          lwgeom_0.2-8       broom_0.7.11       e1071_1.7-9       
-[81] later_1.3.0        class_7.3-20       units_0.7-2        ellipsis_0.3.2    </code></pre>
+[33] pkgconfig_2.0.3    htmltools_0.5.2    highr_0.9          dbplyr_2.1.1      
+[37] fastmap_1.1.0      rlang_1.0.2        readxl_1.3.1       rstudioapi_0.13   
+[41] farver_2.1.0       jquerylib_0.1.4    generics_0.1.1     jsonlite_1.7.3    
+[45] vroom_1.5.7        magrittr_2.0.1     Matrix_1.4-0       Rcpp_1.0.8        
+[49] munsell_0.5.0      fansi_1.0.2        lifecycle_1.0.1    stringi_1.7.6     
+[53] whisker_0.4        yaml_2.2.1         grid_4.1.2         parallel_4.1.2    
+[57] promises_1.2.0.1   crayon_1.4.2       lattice_0.20-45    splines_4.1.2     
+[61] haven_2.4.3        hms_1.1.1          seacarb_3.3.0      knitr_1.37        
+[65] ps_1.6.0           pillar_1.6.4       reprex_2.0.1       glue_1.6.0        
+[69] evaluate_0.14      getPass_0.2-2      modelr_0.1.8       vctrs_0.3.8       
+[73] tzdb_0.2.0         httpuv_1.6.5       cellranger_1.1.0   gtable_0.3.0      
+[77] assertthat_0.2.1   xfun_0.29          lwgeom_0.2-8       broom_0.7.11      
+[81] e1071_1.7-9        later_1.3.0        viridisLite_0.4.0  class_7.3-20      
+[85] units_0.7-2        ellipsis_0.3.2    </code></pre>
+</div>
 </div>
 
 
