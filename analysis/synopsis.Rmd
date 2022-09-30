@@ -43,22 +43,20 @@ library(colorspace)
 theme_set(theme_bw())
 ```
 
+# Read data
 
+region_name: 1.Atlantic, 2.Pacific, 3.Indian, 4.Arctic, 5.Southern  
 
-byte open_ocean[lon,lat]   (Contiguous storage)  
-    region_name: 1.Atlantic, 2.Pacific, 3.Indian, 4.Arctic, 5.Southern
-byte atlantic[lon,lat]   (Contiguous storage)  
+atlantic  
     region_name: 1.NA SPSS, 2.NA STSS, 3.NA STPS, 4.AEQU, 5.SA STPS, 6.MED (not in FM14)
-byte pacific[lon,lat]   (Contiguous storage)  
+pacific  
     region_name: 1.NP SPSS, 2.NP STSS, 3.NP STPS, 4.PEQU-W, 5.PEQU-E, 6.SP STPS
-byte indian[lon,lat]   (Contiguous storage)  
+indian  
     region_name: 1.Arabian Sea, 2.Bay of Bengal, 3.Equatorial Indian, 4.Southern Indian
-byte arctic[lon,lat]   (Contiguous storage)  
+arctic  
     region_name: 1.ARCTIC ICE (not in FM14), 2.NP ICE, 3.NA ICE, 4.Barents (not in FM14)
-byte southern[lon,lat]   (Contiguous storage)  
+southern  
     region_name: 1.SO STSS, 2.SO SPSS, 3.SO ICE
-
-
 
 
 ```{r read files}
@@ -94,12 +92,104 @@ biome_averages <- bind_rows(
 biome_averages <- biome_averages  %>% 
   mutate(biome = case_when(
     biome == "atlantic_1" ~ "NA SPSS",
+    biome == "atlantic_2" ~ "NA STSS",
     biome == "atlantic_3" ~ "NA STPS",
+    biome == "atlantic_4" ~ "AEQU",
+    biome == "atlantic_5" ~ "SA STPS",
+    biome == "atlantic_6" ~ "MED",
+    biome == "pacific_1" ~ "NP SPSS",
+    biome == "pacific_2" ~ "NP STSS",
+    biome == "pacific_3" ~ "NP STPS",
+    biome == "pacific_4" ~ "PEQU-E",
+    biome == "pacific_5" ~ "PEQU-W",
+    biome == "pacific_6" ~ "SP STSS",
+    biome == "indian_1" ~ "Arabian Sea",
+    biome == "indian_2" ~ "Bay of Bengal",
+    biome == "indian_3" ~ "Equatorial Indian",
+    biome == "indian_4" ~ "Southern Indian",
+    biome == "arctic_1" ~ "ARCTIC ICE",
+    biome == "arctic_2" ~ "NP ICE",
+    biome == "arctic_3" ~ "NA ICE",
+    biome == "arctic_4" ~ "Barents",
     biome == "southern_1" ~ "SO STSS",
     biome == "southern_2" ~ "SO SPSS",
+    biome == "southern_3" ~ "SO ICE",
     TRUE ~ "other"
-  )) %>% 
-  filter(biome != "other")
+  ))
+
+
+```
+
+# Filter biomes
+
+```{r filter_biomes}
+
+biome_averages <- biome_averages  %>%
+  filter(biome %in% c("NA SPSS",
+                      "NA STPS",
+                      "SO STSS",
+                      "SO SPSS"))
+
+biome_averages <- biome_averages %>% 
+  mutate(date = paste(year,sprintf("%02d",month),"15", sep = "-"),
+         date = as.Date(date, format = "%Y-%m-%d"))
+
+```
+
+
+# pCO2 - SST circles
+
+```{r pCO2_sst_circles}
+
+biome_average_class <- biome_averages %>%
+  group_by(biome, month, class) %>%
+  summarise(across(c("spco2", "tos"), list(mean = mean, sd = sd), na.rm = TRUE)) %>%
+  ungroup()
+
+biome_average_class %>% 
+  ggplot(aes(tos_mean, spco2_mean, col = class)) +
+  geom_path() +
+  geom_point() +
+  facet_wrap(~biome)
+
+biome_average_class_model <- biome_averages %>%
+  group_by(biome, month, class, model) %>%
+  summarise(across(c("spco2", "dissicos", "tos"), list(mean = mean, sd = sd), na.rm = TRUE)) %>%
+  ungroup()
+
+biome_average_class_model %>% 
+  ggplot(aes(tos_mean, spco2_mean, col = class, group = model)) +
+  geom_path() +
+  # geom_point() +
+  facet_wrap(~biome)
+
+biome_average_class_model %>% 
+  ggplot(aes(tos_mean, dissicos_mean, col = class, group = model)) +
+  geom_path() +
+  # geom_point() +
+  facet_wrap(~biome)
+
+biome_average_class_year <- biome_averages %>%
+  group_by(biome, date, class) %>%
+  summarise(across(c("spco2", "tos"), list(mean = mean, sd = sd), na.rm = TRUE)) %>%
+  ungroup()
+
+biome_average_class_year %>% 
+  ggplot(aes(tos_mean, spco2_mean, col = date)) +
+  geom_path() +
+  scale_color_viridis_c() +
+  # geom_point() +
+  facet_grid(class~biome, scales = "free")
+
+
+```
+
+
+
+
+# Seasonal amplitude time series
+
+```{r amplitude_time_series}
 
 amplitudes <-
   biome_averages %>%
@@ -112,6 +202,20 @@ amplitudes <-
             max = max(value),
             amplitude = max - min) %>%
   ungroup()
+
+amplitudes %>%
+  group_split(parameter) %>%
+  # head(1) %>% 
+  map(
+    ~ ggplot(data = .x,
+             aes(year, amplitude)) +
+      geom_path(aes(col = model)) +
+      geom_smooth(method = "lm", col="black", se=FALSE) +
+      labs(y = .x$parameter,
+           title = "Seasonal amplitude (annual max - min)") +
+      scale_color_discrete(name = "product") +
+      facet_grid(biome ~ class, scales = "free_y")
+  )
 
 
 pdf("output/amplitude_time_series.pdf",
@@ -132,6 +236,23 @@ amplitudes %>%
   )
 dev.off()
 
+amplitudes %>%
+  select(-amplitude) %>%
+  pivot_longer(min:max,
+               names_to = "extreme",
+               values_to = "value") %>%
+  group_split(parameter) %>%
+  # head(1) %>%
+  map(
+    ~ ggplot(data = .x,
+             aes(year, value, linetype = extreme)) +
+      geom_path(aes(col = model)) +
+      geom_smooth(method = "lm", col = "black", se = FALSE) +
+      labs(y = .x$parameter,
+           title = "Annual max & min") +
+      scale_color_discrete(name = "product") +
+      facet_grid(biome ~ class, scales = "free_y")
+  )
 
 pdf("output/min_max_time_series.pdf",
     width = 10,
