@@ -79,6 +79,38 @@ region_masks_all %>%
   geom_raster() +
   coord_quickmap(expand = 0)
 
+
+region_masks_sc <- region_masks_all %>%
+  mutate(biome = case_when(
+    biome %in% c("atlantic_2", "pacific_2") ~ "atlantic_2_pacific_2",
+    biome %in% c("atlantic_3", "pacific_3") ~ "atlantic_3_pacific_3",
+    biome %in% c("atlantic_5", "pacific_6", "indian_4") ~ "atlantic_5_pacific_6_indian_4",
+    biome %in% c("southern_1", "southern_2") ~ "southern_1_southern_2",
+    TRUE ~ biome
+  ))
+
+
+region_masks_sc %>%
+  filter(biome %in% c(
+    "atlantic_2_pacific_2",
+    "atlantic_3_pacific_3",
+    "atlantic_5_pacific_6_indian_4",
+    "southern_1_southern_2",
+    "atlantic_1",
+    "pacific_1"
+  )) %>% 
+  ggplot(aes(lon, lat, fill = biome)) +
+  geom_raster() +
+  coord_quickmap(expand = 0)
+
+biomes_RECCAP2 <- region_masks_all %>% 
+  distinct(biome) %>% 
+  pull()
+
+region_masks_all <- bind_rows(region_masks_all,
+                              region_masks_sc)
+
+
 region_masks_all <- region_masks_all %>% 
     mutate(area = earth_surf(lat = lat))
 
@@ -241,6 +273,7 @@ for (i_model in models) {
     # calculate biome average variable
     variable_data_tibble_map <-
       variable_data_tibble %>%
+      filter(biome %in% biomes_RECCAP2) %>% 
       select(-c(month, biome)) %>%
       group_by(lat, lon, year) %>%
       summarise(amplitude =

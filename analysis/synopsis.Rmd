@@ -114,6 +114,10 @@ biome_averages <- biome_averages  %>%
     biome == "southern_1" ~ "SO STSS",
     biome == "southern_2" ~ "SO SPSS",
     biome == "southern_3" ~ "SO ICE",
+    biome == "atlantic_2_pacific_2" ~ "STSS NA + NP",
+    biome == "atlantic_3_pacific_3" ~ "STPS NA + NP",
+    biome == "atlantic_5_pacific_6_indian_4" ~ "STPS SA + SP + SI",
+    biome == "southern_1_southern_2" ~ "SO STSS + SPSS", 
     TRUE ~ "other"
   ))
 
@@ -126,9 +130,11 @@ biome_averages <- biome_averages  %>%
 
 biome_averages <- biome_averages  %>%
   filter(biome %in% c("NA SPSS",
-                      "NA STPS",
-                      "SO STSS",
-                      "SO SPSS"))
+                      "NP SPSS",
+                      "STSS NA + NP",
+                      "STPS NA + NP",
+                      "STPS SA + SP + SI",
+                      "SO STSS + SPSS"))
 
 biome_averages <- biome_averages %>% 
   mutate(date = paste(year,sprintf("%02d",month),"15", sep = "-"),
