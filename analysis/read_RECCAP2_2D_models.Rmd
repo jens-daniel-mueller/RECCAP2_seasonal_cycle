@@ -59,6 +59,25 @@ region_masks_all <-
   read_ncdf(paste(path_reccap2, "RECCAP2_region_masks_all_v20220620.nc", sep = "")) %>%
   as_tibble()
 
+region_masks_seasonal_cycle <-
+  read_ncdf(paste(path_reccap2, "RECCAP2_scycle_mask_all_v20221215.nc", sep = "")) %>%
+  as_tibble()
+
+region_masks_seasonal_cycle %>%
+  ggplot(aes(lon, lat, fill = as.factor(smask))) +
+  geom_raster() +
+  coord_quickmap(expand = 0)
+
+region_masks_seasonal_cycle <- region_masks_seasonal_cycle %>% 
+  filter(smask == 1) %>% 
+  select(-smask)
+
+region_masks_all <- 
+  left_join(region_masks_seasonal_cycle,
+            region_masks_all)
+
+rm(region_masks_seasonal_cycle)
+
 region_masks_all <- region_masks_all %>%
   filter(seamask == 1) %>% 
   select(lon, lat, atlantic:southern) %>% 
@@ -156,10 +175,10 @@ variables <-
     "sos")
 
 
-# models <- models[8]
+# models <- models[3:10]
 
 for (i_model in models) {
-  # i_model <- models[1]
+  # i_model <- models[3]
   print(i_model)
   
   for (i_model_ID in model_IDs) {
@@ -186,7 +205,7 @@ for (i_model in models) {
     
     
     for (i_variable in variables_available) {
-      # i_variable <- variables_available[4]
+      # i_variable <- variables_available[1]
       print(i_variable)
       
       # print("sleep")
@@ -221,7 +240,9 @@ for (i_model in models) {
           as_tibble()
         
         variable_data <- variable_data  %>%
-          mutate(time = as.Date(time, origin = "1850-02-15"))
+          mutate(time = as.Date(time, origin = "1980-01-01"))
+        
+        # variable_data %>% distinct(time) %>% pull()
         
       } else {
         variable_data <-
@@ -232,11 +253,10 @@ for (i_model in models) {
         
       }
       
-      
       # convert to tibble
       variable_data_tibble <- variable_data %>%
         as_tibble()
-      
+
       # remove open link to nc file
       rm(variable_data)
       
