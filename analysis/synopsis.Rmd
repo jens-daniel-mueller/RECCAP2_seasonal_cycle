@@ -71,8 +71,8 @@ surface_co2 <-
     )
   )
 
-surface_co2 <- surface_co2 %>% 
-  filter(model != "NIES-ML3_v20220222")
+# surface_co2 <- surface_co2 %>% 
+#   filter(model != "NIES-ML3_v20220222")
 
 models <-
   read_csv(
@@ -195,7 +195,20 @@ biome_average_class_year %>%
 
 # Seasonal amplitude time series
 
-```{r amplitude_time_series}
+```{r formatting}
+
+biome_averages <- biome_averages %>% 
+  mutate(class = case_when(class == "models" ~ "GOBMs",
+                           class == "surface_co2" ~ "pCO2 products",
+                           TRUE ~ class))
+
+flux_amp_title <- expression("Integrated flux amplitude" ~ (Pg ~ C ~ yr ^ {-1}))
+flux_int_title <- expression("Integrated flux" ~ (Pg ~ C ~ yr ^ {-1}))
+
+```
+
+
+```{r min_max_individual_products}
 
 amplitudes <-
   biome_averages %>%
@@ -224,22 +237,26 @@ amplitudes %>%
   )
 
 
-pdf("output/amplitude_time_series.pdf",
+pdf("output/amplitude_min_max_individual_products.pdf",
     width = 10,
     height = 10)
+
 amplitudes %>%
+  filter(parameter == "fgco2_reg") %>%
   group_split(parameter) %>%
-  # head(1) %>% 
+  # head(1) %>%
   map(
     ~ ggplot(data = .x,
              aes(year, amplitude)) +
       geom_path(aes(col = model)) +
-      geom_smooth(method = "lm", col="black", se=FALSE) +
-      labs(y = .x$parameter,
-           title = "Seasonal amplitude (annual max - min)") +
+      # geom_smooth(method = "lm", col = "black", se = FALSE) +
+      labs(y = flux_amp_title) +
       scale_color_discrete(name = "product") +
-      facet_grid(biome ~ class, scales = "free_y")
+      facet_grid(biome ~ class, scales = "free_y") +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
   )
+
 dev.off()
 
 amplitudes %>%
@@ -260,26 +277,364 @@ amplitudes %>%
       facet_grid(biome ~ class, scales = "free_y")
   )
 
-pdf("output/min_max_time_series.pdf",
+pdf("output/min_max_individual_products.pdf",
     width = 10,
     height = 10)
+
 amplitudes %>%
   select(-amplitude) %>%
   pivot_longer(min:max,
                names_to = "extreme",
                values_to = "value") %>%
+  filter(parameter == "fgco2_reg") %>%
   group_split(parameter) %>%
   # head(1) %>%
   map(
     ~ ggplot(data = .x,
              aes(year, value, linetype = extreme)) +
       geom_path(aes(col = model)) +
-      geom_smooth(method = "lm", col = "black", se = FALSE) +
-      labs(y = .x$parameter,
-           title = "Annual max & min") +
+      # geom_smooth(method = "lm", col = "black", se = FALSE) +
+      labs(y = flux_int_title) +
       scale_color_discrete(name = "product") +
-      facet_grid(biome ~ class, scales = "free_y")
+      facet_grid(biome ~ class, scales = "free_y") +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
   )
+
+dev.off()
+
+```
+
+
+```{r min_max_ensemble}
+
+amplitudes <-
+  biome_averages %>%
+  select(year, month, biome, class, model, fgco2, fgco2_reg, spco2) %>% 
+  pivot_longer(fgco2:spco2,
+               names_to = "parameter",
+               values_to = "value") %>% 
+  group_by(class, model, year, biome, parameter) %>%
+  summarise(min = min(value),
+            max = max(value),
+            amplitude = max - min) %>%
+  ungroup() %>% 
+  group_by(class, year, biome, parameter) %>%
+  summarise(min_mean = mean(min),
+            min_sd = sd(min),
+            max_mean = mean(max),
+            max_sd = sd(max),
+            amplitude_mean = mean(amplitude),
+            amplitude_sd = sd(amplitude)) %>%
+  ungroup() 
+  
+
+amplitudes %>%
+  group_split(parameter) %>%
+  # head(1) %>%
+  map(
+    ~ ggplot(
+      data = .x,
+      aes(
+        year,
+        amplitude_mean,
+        ymin = amplitude_mean - amplitude_sd,
+        ymax = amplitude_mean + amplitude_sd
+      )
+    ) +
+      geom_path(aes(col = class)) +
+      geom_ribbon(aes(fill = class), alpha = 0.5) +
+      labs(y = .x$parameter) +
+      scale_color_manual(values = c("#228833", "#4477AA"), name = "product") +
+      scale_fill_manual(values = c("#228833", "#4477AA"), name = "product") +
+      facet_wrap(biome ~ ., scales = "free_y"
+      ) +
+      coord_cartesian(expand = 0) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )
+
+
+pdf("output/amplitude_min_max_ensemble.pdf",
+    width = 8,
+    height = 6)
+
+amplitudes %>%
+  filter(parameter == "fgco2_reg") %>%
+  group_split(parameter) %>%
+  head(1) %>%
+  map(
+    ~ ggplot(
+      data = .x,
+      aes(
+        year,
+        amplitude_mean,
+        ymin = amplitude_mean - amplitude_sd,
+        ymax = amplitude_mean + amplitude_sd
+      )
+    ) +
+      geom_path(aes(col = class)) +
+      geom_ribbon(aes(fill = class), alpha = 0.5) +
+      labs(y = flux_amp_title) +
+      scale_color_manual(values = c("#228833", "#4477AA"), name = "product") +
+      scale_fill_manual(values = c("#228833", "#4477AA"), name = "product") +
+      coord_cartesian(expand = 0) +
+      facet_wrap(biome ~ .
+                 , scales = "free_y") +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )
+
+dev.off()
+
+amplitudes %>%
+  group_split(parameter) %>%
+  # head(1) %>%
+  map(
+    ~ ggplot(
+      data = .x
+    ) +
+      geom_hline(yintercept = 0) +
+      geom_path(aes(year, min_mean,
+                    col = class,
+                    linetype = "Annual mininmum")) +
+      geom_path(aes(year, max_mean,
+                    col = class,
+                    linetype = "Annual maximum")) +
+      geom_ribbon(aes(year, min_mean,
+                      ymin = min_mean - min_sd,
+                      ymax = min_mean + min_sd,
+                      fill = class), alpha = 0.5) +
+      geom_ribbon(aes(year, max_mean,
+                      ymin = max_mean - max_sd,
+                      ymax = max_mean + max_sd,
+                      fill = class), alpha = 0.5) +
+      labs(y = .x$parameter) +
+      scale_color_manual(values = c("#228833", "#4477AA"), name = "product") +
+      scale_fill_manual(values = c("#228833", "#4477AA"), name = "product") +
+      facet_wrap(biome ~ .
+                 , scales = "free_y"
+      ) +
+      coord_cartesian(expand = 0) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )
+
+pdf("output/min_max_ensemble.pdf",
+    width = 8,
+    height = 6)
+
+amplitudes %>%
+  filter(parameter == "fgco2_reg") %>% 
+  group_split(parameter) %>%
+  # head(1) %>%
+  map(
+    ~ ggplot(
+      data = .x
+    ) +
+      geom_hline(yintercept = 0) +
+      geom_path(aes(year, min_mean,
+                    col = class,
+                    linetype = "Annual mininmum")) +
+      geom_path(aes(year, max_mean,
+                    col = class,
+                    linetype = "Annual maximum")) +
+      geom_ribbon(aes(year, min_mean,
+                      ymin = min_mean - min_sd,
+                      ymax = min_mean + min_sd,
+                      fill = class), alpha = 0.5) +
+      geom_ribbon(aes(year, max_mean,
+                      ymin = max_mean - max_sd,
+                      ymax = max_mean + max_sd,
+                      fill = class), alpha = 0.5) +
+      labs(y = flux_int_title) +
+      scale_color_manual(values = c("#228833", "#4477AA"), name = "product") +
+      scale_fill_manual(values = c("#228833", "#4477AA"), name = "product") +
+      facet_wrap(biome ~ .
+                 , scales = "free_y"
+      ) +
+      coord_cartesian(expand = 0) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )
+
+dev.off()
+
+```
+
+
+```{r seasons_ensemble}
+
+
+amplitudes <-
+  biome_averages %>%
+  mutate(season = seas::mkseas(date, width = "JFM")) %>%
+  select(season, year, biome, class, model, fgco2, fgco2_reg, spco2) %>% 
+  pivot_longer(fgco2:spco2,
+               names_to = "parameter",
+               values_to = "value") %>% 
+  group_by(class, model, year, season, biome, parameter) %>%
+  summarise(value = mean(value)) %>%
+  ungroup() %>% 
+  group_by(class, year, season, biome, parameter) %>%
+  summarise(mean = mean(value),
+            sd = sd(value)) %>%
+  ungroup() %>% 
+  filter(season %in% c("JFM", "JAS")) %>% 
+  pivot_wider(names_from = season,
+              values_from = c(mean, sd))
+
+
+amplitudes %>%
+  group_split(parameter) %>%
+  # head(1) %>%
+  map(
+    ~ ggplot(
+      data = .x
+    ) +
+      geom_hline(yintercept = 0) +
+      geom_path(aes(year, mean_JFM,
+                    col = class,
+                    linetype = "JFM")) +
+      geom_path(aes(year, mean_JAS,
+                    col = class,
+                    linetype = "JAS")) +
+      geom_ribbon(aes(year, mean_JFM,
+                      ymin = mean_JFM - sd_JFM,
+                      ymax = mean_JFM + sd_JFM,
+                      fill = class), alpha = 0.5) +
+      geom_ribbon(aes(year, mean_JAS,
+                      ymin = mean_JAS - sd_JAS,
+                      ymax = mean_JAS + sd_JAS,
+                      fill = class), alpha = 0.5) +
+      labs(y = .x$parameter) +
+      scale_color_manual(values = c("#228833", "#4477AA"), name = "product") +
+      scale_fill_manual(values = c("#228833", "#4477AA"), name = "product") +
+      facet_wrap(biome ~ .
+                 , scales = "free_y"
+      ) +
+      coord_cartesian(expand = 0) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )
+
+pdf("output/seasonal_ensemble.pdf",
+    width = 8,
+    height = 6)
+
+amplitudes %>%
+  filter(parameter == "fgco2_reg") %>% 
+  group_split(parameter) %>%
+  # head(1) %>%
+  map(
+    ~ ggplot(
+      data = .x
+    ) +
+      geom_hline(yintercept = 0) +
+      geom_path(aes(year, mean_JFM,
+                    col = class,
+                    linetype = "JFM")) +
+      geom_path(aes(year, mean_JAS,
+                    col = class,
+                    linetype = "JAS")) +
+      geom_ribbon(aes(year, mean_JFM,
+                      ymin = mean_JFM - sd_JFM,
+                      ymax = mean_JFM + sd_JFM,
+                      fill = class), alpha = 0.5) +
+      geom_ribbon(aes(year, mean_JAS,
+                      ymin = mean_JAS - sd_JAS,
+                      ymax = mean_JAS + sd_JAS,
+                      fill = class), alpha = 0.5) +
+      labs(y = flux_int_title) +
+      scale_color_manual(values = c("#228833", "#4477AA"), name = "product") +
+      scale_fill_manual(values = c("#228833", "#4477AA"), name = "product") +
+      facet_wrap(biome ~ .
+                 , scales = "free_y"
+      ) +
+      coord_cartesian(expand = 0) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )
+
+dev.off()
+
+
+amplitudes <-
+  biome_averages %>%
+  mutate(season = seas::mkseas(date, width = "JFM")) %>%
+  select(season, year, biome, class, model, fgco2, fgco2_reg, spco2) %>% 
+  pivot_longer(fgco2:spco2,
+               names_to = "parameter",
+               values_to = "value") %>% 
+  filter(season %in% c("JFM", "JAS")) %>% 
+  group_by(class, model, year, season, biome, parameter) %>%
+  summarise(value = mean(value)) %>%
+  ungroup() %>% 
+  pivot_wider(names_from = season,
+              values_from = value) %>% 
+  mutate(amplitude = JAS - JFM) %>% 
+  group_by(class, year, biome, parameter) %>%
+  summarise(amplitude_mean = mean(amplitude),
+            amplitude_sd = sd(amplitude)) %>%
+  ungroup()
+  
+
+amplitudes %>%
+  group_split(parameter) %>%
+  head(1) %>%
+  map(
+    ~ ggplot(
+      data = .x,
+      aes(
+        year,
+        amplitude_mean,
+        ymin = amplitude_mean - amplitude_sd,
+        ymax = amplitude_mean + amplitude_sd
+      )
+    ) +
+      geom_path(aes(col = class)) +
+      geom_ribbon(aes(fill = class), alpha = 0.5) +
+      labs(y = .x$parameter) +
+      scale_color_manual(values = c("#228833", "#4477AA"), name = "product") +
+      scale_fill_manual(values = c("#228833", "#4477AA"), name = "product") +
+      facet_wrap(biome ~ ., scales = "free_y"
+      ) +
+      coord_cartesian(expand = 0) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )
+
+
+pdf("output/amplitude_seasonal_ensemble.pdf",
+    width = 8,
+    height = 6)
+
+amplitudes %>%
+  filter(parameter == "fgco2_reg") %>%
+  group_split(parameter) %>%
+  head(1) %>%
+  map(
+    ~ ggplot(
+      data = .x,
+      aes(
+        year,
+        amplitude_mean,
+        ymin = amplitude_mean - amplitude_sd,
+        ymax = amplitude_mean + amplitude_sd
+      )
+    ) +
+      geom_path(aes(col = class)) +
+      geom_ribbon(aes(fill = class), alpha = 0.5) +
+      labs(y = flux_amp_title) +
+      scale_color_manual(values = c("#228833", "#4477AA"), name = "product") +
+      scale_fill_manual(values = c("#228833", "#4477AA"), name = "product") +
+      coord_cartesian(expand = 0) +
+      facet_wrap(biome ~ .
+                 , scales = "free_y") +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )
+
 dev.off()
 
 ```
