@@ -14,7 +14,7 @@
 
 <title>Read data</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -77,6 +77,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -97,6 +98,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -154,11 +158,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -187,8 +195,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -196,16 +204,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -331,7 +332,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -341,7 +342,7 @@ div.tocify {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Read data
      
     <span class="caret"></span>
@@ -382,7 +383,7 @@ div.tocify {
 <div id="header">
 
 <div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
@@ -393,7 +394,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Read data</h1>
 <h4 class="author">Jens Daniel Müller</h4>
-<h4 class="date">14 October, 2022</h4>
+<h4 class="date">20 December, 2022</h4>
 
 </div>
 
@@ -422,7 +423,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-10-14
+<strong>Last updated:</strong> 2022-12-20
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -553,15 +554,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree188de231f50deb03acb2405f2ee4671b9c5e8264targetblank188de23a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreeca19f9b4e7a831da833b7a9672decc4fdb920407targetblankca19f9ba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/188de231f50deb03acb2405f2ee4671b9c5e8264" target="_blank">188de23</a>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/ca19f9b4e7a831da833b7a9672decc4fdb920407" target="_blank">ca19f9b</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree188de231f50deb03acb2405f2ee4671b9c5e8264targetblank188de23a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreeca19f9b4e7a831da833b7a9672decc4fdb920407targetblankca19f9ba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -571,7 +572,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/188de231f50deb03acb2405f2ee4671b9c5e8264" target="_blank">188de23</a>.
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/ca19f9b4e7a831da833b7a9672decc4fdb920407" target="_blank">ca19f9b</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -588,6 +589,7 @@ were generated:
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    output/20221220_backup/
 
 Untracked files:
     Untracked:  code/Workflowr_project_managment.R
@@ -637,6 +639,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/ca19f9b4e7a831da833b7a9672decc4fdb920407/analysis/read_RECCAP2_2D_surface_CO2.Rmd" target="_blank">ca19f9b</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+<td>
+applied seasonal cycle complete coverage mask
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/read_RECCAP2_2D_surface_CO2.html" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -780,24 +816,12 @@ path_cmorized_ancillary &lt;-
   read_ncdf(paste(path_reccap2, &quot;RECCAP2_region_masks_all_v20220620.nc&quot;, sep = &quot;&quot;)) %&gt;%
   as_tibble()
 
-region_masks_all &lt;- region_masks_all %&gt;%
-  filter(seamask == 1) %&gt;% 
-  select(lon, lat, atlantic:southern) %&gt;% 
-  pivot_longer(atlantic:southern,
-               names_to = &quot;region&quot;,
-               values_to = &quot;value&quot;) %&gt;%
-  mutate(value = as.factor(value))
+region_masks_seasonal_cycle &lt;-
+  read_ncdf(paste(path_reccap2, &quot;RECCAP2_scycle_mask_all_v20221215.nc&quot;, sep = &quot;&quot;)) %&gt;%
+  as_tibble()
 
-region_masks_all &lt;- region_masks_all %&gt;%
-  filter(value != 0)
-
-region_masks_all &lt;- region_masks_all %&gt;%
-  mutate(biome = paste(region, value, sep = &quot;_&quot;)) %&gt;% 
-  select(lon, lat, biome)
-
-
-region_masks_all %&gt;%
-  ggplot(aes(lon, lat, fill = biome)) +
+region_masks_seasonal_cycle %&gt;%
+  ggplot(aes(lon, lat, fill = as.factor(smask))) +
   geom_raster() +
   coord_quickmap(expand = 0)</code></pre>
 <p><img src="figure/read_RECCAP2_2D_surface_CO2.Rmd/region_mask-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -838,6 +862,74 @@ jens-daniel-mueller
 </table>
 </div>
 </div>
+<pre class="r"><code>region_masks_seasonal_cycle &lt;- region_masks_seasonal_cycle %&gt;% 
+  filter(smask == 1) %&gt;% 
+  select(-smask)
+
+region_masks_all &lt;- 
+  left_join(region_masks_seasonal_cycle,
+            region_masks_all)
+
+rm(region_masks_seasonal_cycle)
+
+region_masks_all &lt;- region_masks_all %&gt;%
+  filter(seamask == 1) %&gt;% 
+  select(lon, lat, atlantic:southern) %&gt;% 
+  pivot_longer(atlantic:southern,
+               names_to = &quot;region&quot;,
+               values_to = &quot;value&quot;) %&gt;%
+  mutate(value = as.factor(value))
+
+region_masks_all &lt;- region_masks_all %&gt;%
+  filter(value != 0)
+
+region_masks_all &lt;- region_masks_all %&gt;%
+  mutate(biome = paste(region, value, sep = &quot;_&quot;)) %&gt;% 
+  select(lon, lat, biome)
+
+
+region_masks_all %&gt;%
+  ggplot(aes(lon, lat, fill = biome)) +
+  geom_raster() +
+  coord_quickmap(expand = 0)</code></pre>
+<p><img src="figure/read_RECCAP2_2D_surface_CO2.Rmd/region_mask-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-region_mask-2">
+Past versions of region_mask-2.png
+</button>
+</p>
+<div id="fig-region_mask-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/region_mask-2.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>region_masks_sc &lt;- region_masks_all %&gt;%
   mutate(biome = case_when(
     biome %in% c(&quot;atlantic_2&quot;, &quot;pacific_2&quot;) ~ &quot;atlantic_2_pacific_2&quot;,
@@ -860,7 +952,7 @@ region_masks_sc %&gt;%
   ggplot(aes(lon, lat, fill = biome)) +
   geom_raster() +
   coord_quickmap(expand = 0)</code></pre>
-<p><img src="figure/read_RECCAP2_2D_surface_CO2.Rmd/region_mask-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/read_RECCAP2_2D_surface_CO2.Rmd/region_mask-3.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>biomes_RECCAP2 &lt;- region_masks_all %&gt;% 
   distinct(biome) %&gt;% 
   pull()
@@ -897,8 +989,10 @@ variables &lt;-
     &quot;tos&quot;,
     &quot;sos&quot;)
 
+# models &lt;- models[7:9]
+
 for (i_model in models) {
-  # i_model &lt;- models[9]
+  # i_model &lt;- models[6]
   print(i_model)
   
   variables_available &lt;-
@@ -938,7 +1032,7 @@ for (i_model in models) {
     print(file)
     
     # read in data
-    if (i_model %in% c(&quot;SOMFFN_v20211121&quot;)) {
+    if (i_model %in% c(&quot;none&quot;)) {
       variable_data &lt;-
         read_ncdf(paste(paste0(path_cmorized, i_model),
                         file,
@@ -948,13 +1042,12 @@ for (i_model in models) {
         as_tibble()
       
       variable_data &lt;- variable_data %&gt;%
-        mutate(time = as.Date(as.POSIXct(time,
-                                         origin = &quot;1980-01-15&quot;)),
+        mutate(time = as.Date(time, origin = &quot;1978-01-01&quot;),
                !!sym(i_variable) := if_else(!!sym(i_variable) == -999,
                                             NaN,
                                             !!sym(i_variable))) %&gt;%
         select(-ends_with(&quot;raw&quot;))
-      
+
       
     } else {
       variable_data &lt;-
@@ -969,6 +1062,8 @@ for (i_model in models) {
     # convert to tibble
     variable_data_tibble &lt;- variable_data %&gt;%
       as_tibble()
+    
+    # variable_data_tibble %&gt;% distinct(time) %&gt;% pull()
     
     # remove open link to nc file
     rm(variable_data)
@@ -1262,6 +1357,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-3.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-3.png" target="_blank">88ca5c1</a>
 </td>
 <td>
@@ -1298,6 +1404,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-4.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-4.png" target="_blank">88ca5c1</a>
@@ -1416,6 +1533,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-7.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-7.png" target="_blank">88ca5c1</a>
 </td>
 <td>
@@ -1532,6 +1660,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-10.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-10.png" target="_blank">88ca5c1</a>
 </td>
 <td>
@@ -1646,6 +1785,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-13.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-13.png" target="_blank">88ca5c1</a>
@@ -1788,6 +1938,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-16.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-16.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -1835,6 +1996,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-17.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-17.png" target="_blank">47e8198</a>
@@ -1962,6 +2134,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-20.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-20.png" target="_blank">88ca5c1</a>
@@ -2102,6 +2285,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-23.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-23.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -2229,6 +2423,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-26.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-26.png" target="_blank">88ca5c1</a>
 </td>
 <td>
@@ -2347,6 +2552,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-29.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-29.png" target="_blank">88ca5c1</a>
 </td>
 <td>
@@ -2383,6 +2599,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-30.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-30.png" target="_blank">88ca5c1</a>
@@ -2499,6 +2726,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-33.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-33.png" target="_blank">88ca5c1</a>
@@ -2641,6 +2879,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-36.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-36.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -2688,6 +2937,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-37.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-37.png" target="_blank">47e8198</a>
@@ -2839,6 +3099,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-40.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-40.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -2988,6 +3259,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-43.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-43.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -3135,6 +3417,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-46.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-46.png" target="_blank">47e8198</a>
@@ -3288,6 +3581,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-49.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-49.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -3335,6 +3639,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-50.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-50.png" target="_blank">47e8198</a>
@@ -3486,6 +3801,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-53.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-53.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -3615,6 +3941,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-56.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-56.png" target="_blank">88ca5c1</a>
 </td>
 <td>
@@ -3731,6 +4068,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-59.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-59.png" target="_blank">88ca5c1</a>
 </td>
 <td>
@@ -3767,6 +4115,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-60.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-60.png" target="_blank">88ca5c1</a>
@@ -3885,6 +4244,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-63.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-63.png" target="_blank">88ca5c1</a>
 </td>
 <td>
@@ -4001,6 +4371,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-66.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-66.png" target="_blank">88ca5c1</a>
 </td>
 <td>
@@ -4115,6 +4496,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-69.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-69.png" target="_blank">88ca5c1</a>
@@ -4257,6 +4649,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-72.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-72.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -4304,6 +4707,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-73.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-73.png" target="_blank">47e8198</a>
@@ -4455,6 +4869,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-76.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-76.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -4584,6 +5009,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-79.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-79.png" target="_blank">88ca5c1</a>
 </td>
 <td>
@@ -4620,6 +5056,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-80.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-80.png" target="_blank">88ca5c1</a>
@@ -4736,6 +5183,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-83.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/88ca5c1f0630a19d5bef6064083639fcb3b04fcb/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-83.png" target="_blank">88ca5c1</a>
@@ -4878,6 +5336,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-86.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-86.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -4925,6 +5394,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-87.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-87.png" target="_blank">47e8198</a>
@@ -5076,6 +5556,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/cdb4ec1e7e1452d4293e4fea2e8dd16803fa029c/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-90.png" target="_blank">cdb4ec1</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-10-14
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/47e8198e685d0a1ae0b5b7444d83ec7aa6615ab5/docs/figure/read_RECCAP2_2D_surface_CO2.Rmd/subset_cmorized_variable_forcing_data-90.png" target="_blank">47e8198</a>
 </td>
 <td>
@@ -5175,13 +5666,13 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.1.2 (2021-11-01)
+<pre><code>R version 4.2.2 (2022-10-31)
 Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: openSUSE Leap 15.3
+Running under: openSUSE Leap 15.4
 
 Matrix products: default
-BLAS:   /usr/local/R-4.1.2/lib64/R/lib/libRblas.so
-LAPACK: /usr/local/R-4.1.2/lib64/R/lib/libRlapack.so
+BLAS:   /usr/local/R-4.2.2/lib64/R/lib/libRblas.so
+LAPACK: /usr/local/R-4.2.2/lib64/R/lib/libRlapack.so
 
 locale:
  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -5195,34 +5686,43 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] colorspace_2.0-2 marelac_2.1.10   shape_1.4.6      gsw_1.0-6       
- [5] lubridate_1.8.0  stars_0.5-5      sf_1.0-5         abind_1.4-5     
- [9] patchwork_1.1.1  collapse_1.7.0   forcats_0.5.1    stringr_1.4.0   
-[13] dplyr_1.0.7      purrr_0.3.4      readr_2.1.1      tidyr_1.1.4     
-[17] tibble_3.1.6     ggplot2_3.3.5    tidyverse_1.3.1  workflowr_1.7.0 
+ [1] colorspace_2.0-3 marelac_2.1.10   shape_1.4.6      gsw_1.1-1       
+ [5] lubridate_1.9.0  timechange_0.1.1 stars_0.6-0      sf_1.0-9        
+ [9] abind_1.4-5      patchwork_1.1.2  collapse_1.8.9   forcats_0.5.2   
+[13] stringr_1.4.1    dplyr_1.0.10     purrr_0.3.5      readr_2.1.3     
+[17] tidyr_1.2.1      tibble_3.1.8     ggplot2_3.4.0    tidyverse_1.3.2 
+[21] workflowr_1.7.0 
 
 loaded via a namespace (and not attached):
- [1] fs_1.5.2           bit64_4.0.5        httr_1.4.2         rprojroot_2.0.2   
- [5] tools_4.1.2        backports_1.4.1    bslib_0.3.1        utf8_1.2.2        
- [9] R6_2.5.1           KernSmooth_2.23-20 DBI_1.1.2          withr_2.4.3       
-[13] tidyselect_1.1.1   processx_3.5.2     bit_4.0.4          compiler_4.1.2    
-[17] git2r_0.29.0       cli_3.1.1          rvest_1.0.2        RNetCDF_2.5-2     
-[21] xml2_1.3.3         labeling_0.4.2     sass_0.4.0         scales_1.1.1      
-[25] classInt_0.4-3     callr_3.7.0        SolveSAPHE_2.1.0   proxy_0.4-26      
-[29] digest_0.6.29      rmarkdown_2.11     oce_1.5-0          pkgconfig_2.0.3   
-[33] htmltools_0.5.2    highr_0.9          dbplyr_2.1.1       fastmap_1.1.0     
-[37] rlang_1.0.2        readxl_1.3.1       rstudioapi_0.13    farver_2.1.0      
-[41] jquerylib_0.1.4    generics_0.1.1     jsonlite_1.7.3     vroom_1.5.7       
-[45] magrittr_2.0.1     ncmeta_0.3.0       Rcpp_1.0.8         munsell_0.5.0     
-[49] fansi_1.0.2        lifecycle_1.0.1    stringi_1.7.6      whisker_0.4       
-[53] yaml_2.2.1         grid_4.1.2         parallel_4.1.2     promises_1.2.0.1  
-[57] crayon_1.4.2       haven_2.4.3        hms_1.1.1          seacarb_3.3.0     
-[61] knitr_1.37         ps_1.6.0           pillar_1.6.4       reprex_2.0.1      
-[65] glue_1.6.0         evaluate_0.14      getPass_0.2-2      modelr_0.1.8      
-[69] vctrs_0.3.8        tzdb_0.2.0         httpuv_1.6.5       cellranger_1.1.0  
-[73] gtable_0.3.0       assertthat_0.2.1   xfun_0.29          lwgeom_0.2-8      
-[77] broom_0.7.11       e1071_1.7-9        later_1.3.0        viridisLite_0.4.0 
-[81] class_7.3-20       units_0.7-2        ellipsis_0.3.2    </code></pre>
+ [1] fs_1.5.2            bit64_4.0.5         httr_1.4.4         
+ [4] rprojroot_2.0.3     tools_4.2.2         backports_1.4.1    
+ [7] bslib_0.4.1         utf8_1.2.2          R6_2.5.1           
+[10] KernSmooth_2.23-20  DBI_1.1.3           withr_2.5.0        
+[13] tidyselect_1.2.0    processx_3.8.0      bit_4.0.5          
+[16] compiler_4.2.2      git2r_0.30.1        cli_3.4.1          
+[19] rvest_1.0.3         RNetCDF_2.6-1       xml2_1.3.3         
+[22] labeling_0.4.2      sass_0.4.4          scales_1.2.1       
+[25] classInt_0.4-8      SolveSAPHE_2.1.0    callr_3.7.3        
+[28] proxy_0.4-27        digest_0.6.30       oce_1.7-10         
+[31] rmarkdown_2.18      pkgconfig_2.0.3     htmltools_0.5.3    
+[34] highr_0.9           dbplyr_2.2.1        fastmap_1.1.0      
+[37] rlang_1.0.6         readxl_1.4.1        rstudioapi_0.14    
+[40] farver_2.1.1        jquerylib_0.1.4     generics_0.1.3     
+[43] jsonlite_1.8.3      vroom_1.6.0         googlesheets4_1.0.1
+[46] magrittr_2.0.3      ncmeta_0.3.5        Rcpp_1.0.9         
+[49] munsell_0.5.0       fansi_1.0.3         lifecycle_1.0.3    
+[52] stringi_1.7.8       whisker_0.4         yaml_2.3.6         
+[55] grid_4.2.2          parallel_4.2.2      promises_1.2.0.1   
+[58] crayon_1.5.2        haven_2.5.1         seacarb_3.3.1      
+[61] hms_1.1.2           knitr_1.41          ps_1.7.2           
+[64] pillar_1.8.1        reprex_2.0.2        glue_1.6.2         
+[67] evaluate_0.18       getPass_0.2-2       modelr_0.1.10      
+[70] vctrs_0.5.1         tzdb_0.3.0          httpuv_1.6.6       
+[73] cellranger_1.1.0    gtable_0.3.1        assertthat_0.2.1   
+[76] cachem_1.0.6        xfun_0.35           lwgeom_0.2-10      
+[79] broom_1.0.1         e1071_1.7-12        later_1.3.0        
+[82] viridisLite_0.4.1   class_7.3-20        googledrive_2.0.0  
+[85] gargle_1.2.1        units_0.8-0         ellipsis_0.3.2     </code></pre>
 </div>
 </div>
 
