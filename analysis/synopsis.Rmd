@@ -207,6 +207,41 @@ flux_int_title <- expression("Integrated flux" ~ (Pg ~ C ~ yr ^ {-1}))
 
 ```
 
+```{r seasonal_cycles_per_biome}
+
+biome_averages %>% 
+  ggplot(aes(month, fgco2_reg, col=year, group = interaction(year, model))) +
+  geom_path() +
+  scale_color_viridis_c() +
+  facet_grid(biome ~ class) +
+  scale_x_continuous(breaks = seq(1,12,3))
+
+# library(khroma)
+
+biome_averages %>% 
+  filter(class == "GOBMs") %>% 
+  ggplot(aes(month, fgco2_reg, col=model, group = interaction(year, model))) +
+  geom_path() +
+  scale_color_brewer(palette = "Paired") +
+  facet_grid(biome ~ class) +
+  labs(y = flux_int_title) +
+  scale_x_continuous(breaks = seq(1,12,3))
+
+biome_averages %>% 
+  filter(class != "GOBMs") %>% 
+  ggplot(aes(month, fgco2_reg, col=model, group = interaction(year, model))) +
+  geom_path() +
+  scale_color_brewer(palette = "Paired") +
+  facet_grid(biome ~ class) +
+  labs(y = flux_int_title) +
+  scale_x_continuous(breaks = seq(1,12,3))
+
+
+
+```
+
+
+
 
 ```{r min_max_individual_products}
 
@@ -309,16 +344,7 @@ dev.off()
 ```{r min_max_ensemble}
 
 amplitudes <-
-  biome_averages %>%
-  select(year, month, biome, class, model, fgco2, fgco2_reg, spco2) %>% 
-  pivot_longer(fgco2:spco2,
-               names_to = "parameter",
-               values_to = "value") %>% 
-  group_by(class, model, year, biome, parameter) %>%
-  summarise(min = min(value),
-            max = max(value),
-            amplitude = max - min) %>%
-  ungroup() %>% 
+  amplitudes %>% 
   group_by(class, year, biome, parameter) %>%
   summarise(min_mean = mean(min),
             min_sd = sd(min),
@@ -362,7 +388,7 @@ pdf("output/amplitude_min_max_ensemble.pdf",
 amplitudes %>%
   filter(parameter == "fgco2_reg") %>%
   group_split(parameter) %>%
-  head(1) %>%
+  # head(1) %>%
   map(
     ~ ggplot(
       data = .x,
@@ -463,19 +489,114 @@ dev.off()
 ```
 
 
-```{r seasons_ensemble}
+```{r seasons_individual}
 
 
-amplitudes <-
+seasons <-
   biome_averages %>%
   mutate(season = seas::mkseas(date, width = "JFM")) %>%
+  filter(season %in% c("JFM", "JAS")) %>% 
   select(season, year, biome, class, model, fgco2, fgco2_reg, spco2) %>% 
   pivot_longer(fgco2:spco2,
                names_to = "parameter",
                values_to = "value") %>% 
   group_by(class, model, year, season, biome, parameter) %>%
   summarise(value = mean(value)) %>%
-  ungroup() %>% 
+  ungroup()
+
+
+seasons %>%
+  group_split(parameter) %>%
+  # head(1) %>%
+  map(
+    ~ ggplot(data = .x,
+             aes(year, value, linetype = season)) +
+      geom_path(aes(col = model)) +
+      geom_smooth(method = "lm", col = "black", se = FALSE) +
+      labs(y = .x$parameter,
+           title = "Annual max & min") +
+      scale_color_discrete(name = "product") +
+      facet_grid(biome ~ class, scales = "free_y")
+  )
+
+pdf("output/seasonal_individual_products.pdf",
+    width = 10,
+    height = 10)
+
+seasons %>%
+  filter(parameter == "fgco2_reg") %>%
+  group_split(parameter) %>%
+  # head(1) %>%
+  map(
+    ~ ggplot(data = .x,
+             aes(year, value, linetype = season)) +
+      geom_path(aes(col = model)) +
+      # geom_smooth(method = "lm", col = "black", se = FALSE) +
+      labs(y = flux_int_title) +
+      scale_color_discrete(name = "product") +
+      facet_grid(biome ~ class, scales = "free_y") +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )
+
+dev.off()
+
+
+
+amplitudes <-
+  seasons %>% 
+  pivot_wider(names_from = season,
+              values_from = value) %>% 
+  mutate(amplitude = JAS - JFM)
+  
+
+
+amplitudes %>%
+  group_split(parameter) %>%
+  # head(1) %>%
+  map(
+    ~ ggplot(data = .x,
+             aes(year, amplitude)) +
+      geom_path(aes(col = model)) +
+      geom_smooth(method = "lm", col="black", se=FALSE) +
+      labs(y = .x$parameter,
+           title = "Seasonal amplitude (annual max - min)") +
+      scale_color_discrete(name = "product") +
+      facet_grid(biome ~ class, scales = "free_y")
+  )
+
+
+pdf("output/amplitude_seasonal_individual_products.pdf",
+    width = 10,
+    height = 10)
+
+amplitudes %>%
+  filter(parameter == "fgco2_reg") %>%
+  group_split(parameter) %>%
+  # head(1) %>%
+  map(
+    ~ ggplot(data = .x,
+             aes(year, amplitude)) +
+      geom_path(aes(col = model)) +
+      # geom_smooth(method = "lm", col = "black", se = FALSE) +
+      labs(y = flux_amp_title) +
+      scale_color_discrete(name = "product") +
+      facet_grid(biome ~ class, scales = "free_y") +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )
+
+dev.off()
+
+
+```
+
+
+```{r seasons_ensemble}
+
+
+seasons <-
+  seasons %>%
   group_by(class, year, season, biome, parameter) %>%
   summarise(mean = mean(value),
             sd = sd(value)) %>%
@@ -485,7 +606,7 @@ amplitudes <-
               values_from = c(mean, sd))
 
 
-amplitudes %>%
+seasons %>%
   group_split(parameter) %>%
   # head(1) %>%
   map(
@@ -522,7 +643,7 @@ pdf("output/seasonal_ensemble.pdf",
     width = 8,
     height = 6)
 
-amplitudes %>%
+seasons %>%
   filter(parameter == "fgco2_reg") %>% 
   group_split(parameter) %>%
   # head(1) %>%
@@ -560,19 +681,7 @@ dev.off()
 
 
 amplitudes <-
-  biome_averages %>%
-  mutate(season = seas::mkseas(date, width = "JFM")) %>%
-  select(season, year, biome, class, model, fgco2, fgco2_reg, spco2) %>% 
-  pivot_longer(fgco2:spco2,
-               names_to = "parameter",
-               values_to = "value") %>% 
-  filter(season %in% c("JFM", "JAS")) %>% 
-  group_by(class, model, year, season, biome, parameter) %>%
-  summarise(value = mean(value)) %>%
-  ungroup() %>% 
-  pivot_wider(names_from = season,
-              values_from = value) %>% 
-  mutate(amplitude = JAS - JFM) %>% 
+  amplitudes %>%
   group_by(class, year, biome, parameter) %>%
   summarise(amplitude_mean = mean(amplitude),
             amplitude_sd = sd(amplitude)) %>%
@@ -581,7 +690,7 @@ amplitudes <-
 
 amplitudes %>%
   group_split(parameter) %>%
-  head(1) %>%
+  # head(1) %>%
   map(
     ~ ggplot(
       data = .x,
