@@ -59,7 +59,7 @@ region_masks_all <-
   as_tibble()
 
 region_masks_seasonal_cycle <-
-  read_ncdf(paste(path_reccap2, "RECCAP2_scycle_mask_all_v20221215.nc", sep = "")) %>%
+  read_ncdf(paste(path_reccap2, "RECCAP2_scycle_mask_all_v20230110.nc", sep = "")) %>%
   as_tibble()
 
 region_masks_seasonal_cycle %>%
@@ -148,6 +148,7 @@ models <-
   models[str_detect(
     models,
     pattern = "CMEMS|CSIRML6|JenaMLS|JMAMLR|NIES-ML3|OceanSODAETHZ|SOMFFN|spco2_LDEO_HPD_1985-2018|UOEX_Wat20_1985_2019")]
+
 
 # # no run D
 # models <-
