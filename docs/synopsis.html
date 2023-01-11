@@ -394,7 +394,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Synopsis</h1>
 <h4 class="author">Jens Daniel Müller</h4>
-<h4 class="date">20 December, 2022</h4>
+<h4 class="date">11 January, 2023</h4>
 
 </div>
 
@@ -423,7 +423,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-12-20
+<strong>Last updated:</strong> 2023-01-11
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -554,15 +554,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreeb826e1336fa98c800d8d80fca8dc5610b9cfc939targetblankb826e13a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreec2a4c5a591ffb27635bbd13ad4b06047628a527dtargetblankc2a4c5aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/b826e1336fa98c800d8d80fca8dc5610b9cfc939" target="_blank">b826e13</a>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/c2a4c5a591ffb27635bbd13ad4b06047628a527d" target="_blank">c2a4c5a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreeb826e1336fa98c800d8d80fca8dc5610b9cfc939targetblankb826e13a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletreec2a4c5a591ffb27635bbd13ad4b06047628a527dtargetblankc2a4c5aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -572,7 +572,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/b826e1336fa98c800d8d80fca8dc5610b9cfc939" target="_blank">b826e13</a>.
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/c2a4c5a591ffb27635bbd13ad4b06047628a527d" target="_blank">c2a4c5a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -638,6 +638,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/c2a4c5a591ffb27635bbd13ad4b06047628a527d/analysis/synopsis.Rmd" target="_blank">c2a4c5a</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-01-11
+</td>
+<td>
+applied revised seasonal cycle guidelines
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/synopsis.html" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -881,45 +915,45 @@ biome_averages &lt;- bind_rows(
 
 biome_averages &lt;- biome_averages  %&gt;% 
   mutate(biome = case_when(
-    biome == &quot;atlantic_1&quot; ~ &quot;NA SPSS&quot;,
-    biome == &quot;atlantic_2&quot; ~ &quot;NA STSS&quot;,
-    biome == &quot;atlantic_3&quot; ~ &quot;NA STPS&quot;,
+    biome == &quot;atlantic_1&quot; ~ &quot;NA-SPSS&quot;,
+    biome == &quot;atlantic_2&quot; ~ &quot;NA-STSS&quot;,
+    biome == &quot;atlantic_3&quot; ~ &quot;NA-STPS&quot;,
     biome == &quot;atlantic_4&quot; ~ &quot;AEQU&quot;,
-    biome == &quot;atlantic_5&quot; ~ &quot;SA STPS&quot;,
+    biome == &quot;atlantic_5&quot; ~ &quot;SA-STPS&quot;,
     biome == &quot;atlantic_6&quot; ~ &quot;MED&quot;,
-    biome == &quot;pacific_1&quot; ~ &quot;NP SPSS&quot;,
-    biome == &quot;pacific_2&quot; ~ &quot;NP STSS&quot;,
-    biome == &quot;pacific_3&quot; ~ &quot;NP STPS&quot;,
+    biome == &quot;pacific_1&quot; ~ &quot;NP-SPSS&quot;,
+    biome == &quot;pacific_2&quot; ~ &quot;NP-STSS&quot;,
+    biome == &quot;pacific_3&quot; ~ &quot;NP-STPS&quot;,
     biome == &quot;pacific_4&quot; ~ &quot;PEQU-E&quot;,
     biome == &quot;pacific_5&quot; ~ &quot;PEQU-W&quot;,
-    biome == &quot;pacific_6&quot; ~ &quot;SP STSS&quot;,
+    biome == &quot;pacific_6&quot; ~ &quot;SP-STSS&quot;,
     biome == &quot;indian_1&quot; ~ &quot;Arabian Sea&quot;,
     biome == &quot;indian_2&quot; ~ &quot;Bay of Bengal&quot;,
     biome == &quot;indian_3&quot; ~ &quot;Equatorial Indian&quot;,
     biome == &quot;indian_4&quot; ~ &quot;Southern Indian&quot;,
-    biome == &quot;arctic_1&quot; ~ &quot;ARCTIC ICE&quot;,
-    biome == &quot;arctic_2&quot; ~ &quot;NP ICE&quot;,
-    biome == &quot;arctic_3&quot; ~ &quot;NA ICE&quot;,
+    biome == &quot;arctic_1&quot; ~ &quot;ARCTIC-ICE&quot;,
+    biome == &quot;arctic_2&quot; ~ &quot;NP-ICE&quot;,
+    biome == &quot;arctic_3&quot; ~ &quot;NA-ICE&quot;,
     biome == &quot;arctic_4&quot; ~ &quot;Barents&quot;,
-    biome == &quot;southern_1&quot; ~ &quot;SO STSS&quot;,
-    biome == &quot;southern_2&quot; ~ &quot;SO SPSS&quot;,
-    biome == &quot;southern_3&quot; ~ &quot;SO ICE&quot;,
-    biome == &quot;atlantic_2_pacific_2&quot; ~ &quot;STSS NA + NP&quot;,
-    biome == &quot;atlantic_3_pacific_3&quot; ~ &quot;STPS NA + NP&quot;,
-    biome == &quot;atlantic_5_pacific_6_indian_4&quot; ~ &quot;STPS SA + SP + SI&quot;,
-    biome == &quot;southern_1_southern_2&quot; ~ &quot;SO STSS + SPSS&quot;, 
+    biome == &quot;southern_1&quot; ~ &quot;SO-STSS&quot;,
+    biome == &quot;southern_2&quot; ~ &quot;SO-SPSS&quot;,
+    biome == &quot;southern_3&quot; ~ &quot;SO-ICE&quot;,
+    biome == &quot;atlantic_2_pacific_2&quot; ~ &quot;NH-STSS&quot;,
+    biome == &quot;atlantic_3_pacific_3&quot; ~ &quot;NH-STPS&quot;,
+    biome == &quot;atlantic_5_pacific_6_indian_4&quot; ~ &quot;SH-STPS&quot;,
+    biome == &quot;southern_1_southern_2&quot; ~ &quot;SH-SS&quot;, 
     TRUE ~ &quot;other&quot;
   ))</code></pre>
 </div>
 <div id="filter-biomes" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Filter biomes</h1>
 <pre class="r"><code>biome_averages &lt;- biome_averages  %&gt;%
-  filter(biome %in% c(&quot;NA SPSS&quot;,
-                      &quot;NP SPSS&quot;,
-                      &quot;STSS NA + NP&quot;,
-                      &quot;STPS NA + NP&quot;,
-                      &quot;STPS SA + SP + SI&quot;,
-                      &quot;SO STSS + SPSS&quot;))
+  filter(biome %in% c(&quot;NA-SPSS&quot;,
+                      &quot;NP-SPSS&quot;,
+                      &quot;NH-STSS&quot;,
+                      &quot;NH-STPS&quot;,
+                      &quot;SH-STPS&quot;,
+                      &quot;SH-SS&quot;))
 
 biome_averages &lt;- biome_averages %&gt;% 
   mutate(date = paste(year,sprintf(&quot;%02d&quot;,month),&quot;15&quot;, sep = &quot;-&quot;),
@@ -1222,6 +1256,43 @@ flux_int_title &lt;- expression(&quot;Integrated flux&quot; ~ (Pg ~ C ~ yr ^ {-1
   facet_grid(biome ~ class) +
   scale_x_continuous(breaks = seq(1,12,3))</code></pre>
 <p><img src="figure/synopsis.Rmd/seasonal_cycles_per_biome-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasonal_cycles_per_biome-1">
+Past versions of seasonal_cycles_per_biome-1.png
+</button>
+</p>
+<div id="fig-seasonal_cycles_per_biome-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasonal_cycles_per_biome-1.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># library(khroma)
 
 biome_averages %&gt;% 
@@ -1233,6 +1304,43 @@ biome_averages %&gt;%
   labs(y = flux_int_title) +
   scale_x_continuous(breaks = seq(1,12,3))</code></pre>
 <p><img src="figure/synopsis.Rmd/seasonal_cycles_per_biome-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasonal_cycles_per_biome-2">
+Past versions of seasonal_cycles_per_biome-2.png
+</button>
+</p>
+<div id="fig-seasonal_cycles_per_biome-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasonal_cycles_per_biome-2.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>biome_averages %&gt;% 
   filter(class != &quot;GOBMs&quot;) %&gt;% 
   ggplot(aes(month, fgco2_reg, col=model, group = interaction(year, model))) +
@@ -1242,6 +1350,43 @@ biome_averages %&gt;%
   labs(y = flux_int_title) +
   scale_x_continuous(breaks = seq(1,12,3))</code></pre>
 <p><img src="figure/synopsis.Rmd/seasonal_cycles_per_biome-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasonal_cycles_per_biome-3">
+Past versions of seasonal_cycles_per_biome-3.png
+</button>
+</p>
+<div id="fig-seasonal_cycles_per_biome-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasonal_cycles_per_biome-3.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>amplitudes &lt;-
   biome_averages %&gt;%
   select(year, month, biome, class, model, fgco2, fgco2_reg, spco2) %&gt;% 
@@ -1980,12 +2125,123 @@ seasons %&gt;%
   )</code></pre>
 <pre><code>[[1]]</code></pre>
 <p><img src="figure/synopsis.Rmd/seasons_individual-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasons_individual-1">
+Past versions of seasons_individual-1.png
+</button>
+</p>
+<div id="fig-seasons_individual-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasons_individual-1.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[2]]</code></pre>
 <p><img src="figure/synopsis.Rmd/seasons_individual-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasons_individual-2">
+Past versions of seasons_individual-2.png
+</button>
+</p>
+<div id="fig-seasons_individual-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasons_individual-2.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[3]]</code></pre>
 <p><img src="figure/synopsis.Rmd/seasons_individual-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasons_individual-3">
+Past versions of seasons_individual-3.png
+</button>
+</p>
+<div id="fig-seasons_individual-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasons_individual-3.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>pdf(&quot;output/seasonal_individual_products.pdf&quot;,
     width = 10,
     height = 10)
@@ -2032,12 +2288,123 @@ amplitudes %&gt;%
   )</code></pre>
 <pre><code>[[1]]</code></pre>
 <p><img src="figure/synopsis.Rmd/seasons_individual-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasons_individual-4">
+Past versions of seasons_individual-4.png
+</button>
+</p>
+<div id="fig-seasons_individual-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasons_individual-4.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[2]]</code></pre>
 <p><img src="figure/synopsis.Rmd/seasons_individual-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasons_individual-5">
+Past versions of seasons_individual-5.png
+</button>
+</p>
+<div id="fig-seasons_individual-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasons_individual-5.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[3]]</code></pre>
 <p><img src="figure/synopsis.Rmd/seasons_individual-6.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasons_individual-6">
+Past versions of seasons_individual-6.png
+</button>
+</p>
+<div id="fig-seasons_individual-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasons_individual-6.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>pdf(&quot;output/amplitude_seasonal_individual_products.pdf&quot;,
     width = 10,
     height = 10)
@@ -2338,9 +2705,83 @@ jens-daniel-mueller
 <pre><code>
 [[2]]</code></pre>
 <p><img src="figure/synopsis.Rmd/seasons_ensemble-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasons_ensemble-5">
+Past versions of seasons_ensemble-5.png
+</button>
+</p>
+<div id="fig-seasons_ensemble-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasons_ensemble-5.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[3]]</code></pre>
 <p><img src="figure/synopsis.Rmd/seasons_ensemble-6.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-seasons_ensemble-6">
+Past versions of seasons_ensemble-6.png
+</button>
+</p>
+<div id="fig-seasons_ensemble-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8f96fbc2ee9bbf1a0643a600abee1308c62fd924/docs/figure/synopsis.Rmd/seasons_ensemble-6.png" target="_blank">8f96fbc</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2022-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>pdf(&quot;output/amplitude_seasonal_ensemble.pdf&quot;,
     width = 8,
     height = 6)
