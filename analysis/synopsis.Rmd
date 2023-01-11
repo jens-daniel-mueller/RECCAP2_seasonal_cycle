@@ -41,7 +41,14 @@ library(colorspace)
 
 ```{r set_ggplot_theme_global, include = FALSE}
 theme_set(theme_bw())
+
+# definition colors for product classes
+
+col_class <- c("#008C00", "#005AC8", "#A09600")
+
+
 ```
+
 
 # Read data
 
@@ -91,33 +98,33 @@ biome_averages <- bind_rows(
 
 biome_averages <- biome_averages  %>% 
   mutate(biome = case_when(
-    biome == "atlantic_1" ~ "NA SPSS",
-    biome == "atlantic_2" ~ "NA STSS",
-    biome == "atlantic_3" ~ "NA STPS",
+    biome == "atlantic_1" ~ "NA-SPSS",
+    biome == "atlantic_2" ~ "NA-STSS",
+    biome == "atlantic_3" ~ "NA-STPS",
     biome == "atlantic_4" ~ "AEQU",
-    biome == "atlantic_5" ~ "SA STPS",
+    biome == "atlantic_5" ~ "SA-STPS",
     biome == "atlantic_6" ~ "MED",
-    biome == "pacific_1" ~ "NP SPSS",
-    biome == "pacific_2" ~ "NP STSS",
-    biome == "pacific_3" ~ "NP STPS",
+    biome == "pacific_1" ~ "NP-SPSS",
+    biome == "pacific_2" ~ "NP-STSS",
+    biome == "pacific_3" ~ "NP-STPS",
     biome == "pacific_4" ~ "PEQU-E",
     biome == "pacific_5" ~ "PEQU-W",
-    biome == "pacific_6" ~ "SP STSS",
+    biome == "pacific_6" ~ "SP-STSS",
     biome == "indian_1" ~ "Arabian Sea",
     biome == "indian_2" ~ "Bay of Bengal",
     biome == "indian_3" ~ "Equatorial Indian",
     biome == "indian_4" ~ "Southern Indian",
-    biome == "arctic_1" ~ "ARCTIC ICE",
-    biome == "arctic_2" ~ "NP ICE",
-    biome == "arctic_3" ~ "NA ICE",
+    biome == "arctic_1" ~ "ARCTIC-ICE",
+    biome == "arctic_2" ~ "NP-ICE",
+    biome == "arctic_3" ~ "NA-ICE",
     biome == "arctic_4" ~ "Barents",
-    biome == "southern_1" ~ "SO STSS",
-    biome == "southern_2" ~ "SO SPSS",
-    biome == "southern_3" ~ "SO ICE",
-    biome == "atlantic_2_pacific_2" ~ "STSS NA + NP",
-    biome == "atlantic_3_pacific_3" ~ "STPS NA + NP",
-    biome == "atlantic_5_pacific_6_indian_4" ~ "STPS SA + SP + SI",
-    biome == "southern_1_southern_2" ~ "SO STSS + SPSS", 
+    biome == "southern_1" ~ "SO-STSS",
+    biome == "southern_2" ~ "SO-SPSS",
+    biome == "southern_3" ~ "SO-ICE",
+    biome == "atlantic_2_pacific_2" ~ "NH-STSS",
+    biome == "atlantic_3_pacific_3" ~ "NH-STPS",
+    biome == "atlantic_5_pacific_6_indian_4" ~ "SH-STPS",
+    biome == "southern_1_southern_2" ~ "SH-SS", 
     TRUE ~ "other"
   ))
 
@@ -129,12 +136,12 @@ biome_averages <- biome_averages  %>%
 ```{r filter_biomes}
 
 biome_averages <- biome_averages  %>%
-  filter(biome %in% c("NA SPSS",
-                      "NP SPSS",
-                      "STSS NA + NP",
-                      "STPS NA + NP",
-                      "STPS SA + SP + SI",
-                      "SO STSS + SPSS"))
+  filter(biome %in% c("NA-SPSS",
+                      "NP-SPSS",
+                      "NH-STSS",
+                      "NH-STPS",
+                      "SH-STPS",
+                      "SH-SS"))
 
 biome_averages <- biome_averages %>% 
   mutate(date = paste(year,sprintf("%02d",month),"15", sep = "-"),
