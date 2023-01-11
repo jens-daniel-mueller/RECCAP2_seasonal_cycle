@@ -60,7 +60,7 @@ region_masks_all <-
   as_tibble()
 
 region_masks_seasonal_cycle <-
-  read_ncdf(paste(path_reccap2, "RECCAP2_scycle_mask_all_v20221215.nc", sep = "")) %>%
+  read_ncdf(paste(path_reccap2, "RECCAP2_scycle_mask_all_v20230110.nc", sep = "")) %>%
   as_tibble()
 
 region_masks_seasonal_cycle %>%
@@ -148,9 +148,10 @@ models <-
   models[str_detect(
     models,
     pattern = c(
-      "CESM|CNRM|EC-Earth3|FESOM_REcoM_LR|MOM6-Princeton|MRI-ESM2-1|NorESM-OC1.2|ORCA025-GEOMAR|ORCA1-LIM3-PISCES|planktom12"
+      "CCSM-WHOI|CESM|CNRM|EC-Earth3|FESOM_REcoM_LR|MPIOM-HAMOCC|MOM6-Princeton|MRI-ESM2-1|NorESM-OC1.2|ORCA025-GEOMAR|ORCA1-LIM3-PISCES|planktom12"
     )
   )]
+
 
 # # no run D
 # models <-
@@ -178,7 +179,7 @@ variables <-
 # models <- models[3:10]
 
 for (i_model in models) {
-  # i_model <- models[3]
+  # i_model <- models[7]
   print(i_model)
   
   for (i_model_ID in model_IDs) {
