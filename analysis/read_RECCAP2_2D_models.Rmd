@@ -357,6 +357,12 @@ for (i_model in models) {
 
       
       if (i_variable == "fgco2") {
+        
+        if (i_model == "CCSM-WHOI_2D_CO2_20211125") {
+          variable_data_tibble <- variable_data_tibble %>%
+            mutate(fgco2 = -fgco2)
+        }
+        
         fgco2_reg <-
           variable_data_tibble %>%
           select(-c(lon, lat)) %>%
