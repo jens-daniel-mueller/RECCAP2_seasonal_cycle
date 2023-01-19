@@ -394,7 +394,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Synopsis</h1>
 <h4 class="author">Jens Daniel Müller</h4>
-<h4 class="date">12 January, 2023</h4>
+<h4 class="date">19 January, 2023</h4>
 
 </div>
 
@@ -423,7 +423,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-01-12
+<strong>Last updated:</strong> 2023-01-19
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -554,15 +554,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree95d09a243fa0f586f5edfe806192a9e15bdcd1f2targetblank95d09a2a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree4f672fdf17894b8fc88994941b0429a0acd3dda1targetblank4f672fda">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/95d09a243fa0f586f5edfe806192a9e15bdcd1f2" target="_blank">95d09a2</a>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/4f672fdf17894b8fc88994941b0429a0acd3dda1" target="_blank">4f672fd</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree95d09a243fa0f586f5edfe806192a9e15bdcd1f2targetblank95d09a2a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree4f672fdf17894b8fc88994941b0429a0acd3dda1targetblank4f672fda"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -572,7 +572,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/95d09a243fa0f586f5edfe806192a9e15bdcd1f2" target="_blank">95d09a2</a>.
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/4f672fdf17894b8fc88994941b0429a0acd3dda1" target="_blank">4f672fd</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -638,6 +638,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4f672fdf17894b8fc88994941b0429a0acd3dda1/analysis/synopsis.Rmd" target="_blank">4f672fd</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-01-19
+</td>
+<td>
+seperate panel plots and excl MPIOM-HAMOCC
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/2d83a7c0f437a4613cfc0b9954c26354005139a1/docs/synopsis.html" target="_blank">2d83a7c</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-01-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1341,6 +1375,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/2d83a7c0f437a4613cfc0b9954c26354005139a1/docs/figure/synopsis.Rmd/seasonal_cycles_per_biome-1.png" target="_blank">2d83a7c</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-01-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/seasonal_cycles_per_biome-1.png" target="_blank">038ca13</a>
 </td>
 <td>
@@ -1370,6 +1415,7 @@ jens-daniel-mueller
 biome_averages %&gt;% 
   filter(class == &quot;GOBMs&quot;) %&gt;% 
   ggplot(aes(month, fgco2_reg, col=model, group = interaction(year, model))) +
+  geom_hline(yintercept = 0) +
   geom_path() +
   scale_color_brewer(palette = &quot;Paired&quot;) +
   facet_grid(biome ~ class) +
@@ -1400,6 +1446,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/2d83a7c0f437a4613cfc0b9954c26354005139a1/docs/figure/synopsis.Rmd/seasonal_cycles_per_biome-2.png" target="_blank">2d83a7c</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-01-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/seasonal_cycles_per_biome-2.png" target="_blank">038ca13</a>
 </td>
 <td>
@@ -1427,6 +1484,7 @@ jens-daniel-mueller
 <pre class="r"><code>biome_averages %&gt;% 
   filter(class != &quot;GOBMs&quot;) %&gt;% 
   ggplot(aes(month, fgco2_reg, col=model, group = interaction(year, model))) +
+  geom_hline(yintercept = 0) +
   geom_path() +
   scale_color_brewer(palette = &quot;Paired&quot;) +
   facet_grid(biome ~ class) +
@@ -1493,18 +1551,21 @@ jens-daniel-mueller
             amplitude = max - min) %&gt;%
   ungroup()
 
+amplitudes &lt;- amplitudes %&gt;% 
+  filter(parameter == &quot;fgco2_reg&quot;)
+
 amplitudes %&gt;%
-  group_split(parameter) %&gt;%
-  # head(1) %&gt;% 
+  group_split(class) %&gt;%
+  head(1) %&gt;%
   map(
     ~ ggplot(data = .x,
              aes(year, amplitude)) +
       geom_path(aes(col = model)) +
-      geom_smooth(method = &quot;lm&quot;, col=&quot;black&quot;, se=FALSE) +
+      geom_smooth(method = &quot;lm&quot;, col = &quot;black&quot;, se = FALSE) +
       labs(y = .x$parameter,
            title = &quot;Seasonal amplitude (annual max - min)&quot;) +
-      scale_color_discrete(name = &quot;product&quot;) +
-      facet_grid(biome ~ class, scales = &quot;free_y&quot;)
+      scale_color_brewer(palette = &quot;Paired&quot;, name = &quot;product&quot;) +
+      facet_grid(biome ~ ., scales = &quot;free_y&quot;)
   )</code></pre>
 <pre><code>[[1]]</code></pre>
 <p><img src="figure/synopsis.Rmd/min_max_individual_products-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -1556,8 +1617,67 @@ jens-daniel-mueller
 </table>
 </div>
 </div>
+<pre class="r"><code>pdf(&quot;output/amplitude_min_max_individual_products.pdf&quot;,
+    width = 8,
+    height = 4)
+
+amplitudes %&gt;%
+  group_split(class, biome) %&gt;%
+  # head(1) %&gt;%
+  map(
+    ~ ggplot(data = .x,
+             aes(year, amplitude)) +
+      geom_path(aes(col = model)) +
+      # geom_smooth(method = &quot;lm&quot;, col = &quot;black&quot;, se = FALSE) +
+      labs(y = flux_amp_title,
+           title = .x$biome) +
+      scale_color_brewer(palette = &quot;Paired&quot;, name = .x$class) +
+      theme(axis.title.x = element_blank())
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
 <pre><code>
 [[2]]</code></pre>
+<pre><code>
+[[3]]</code></pre>
+<pre><code>
+[[4]]</code></pre>
+<pre><code>
+[[5]]</code></pre>
+<pre><code>
+[[6]]</code></pre>
+<pre><code>
+[[7]]</code></pre>
+<pre><code>
+[[8]]</code></pre>
+<pre><code>
+[[9]]</code></pre>
+<pre><code>
+[[10]]</code></pre>
+<pre><code>
+[[11]]</code></pre>
+<pre><code>
+[[12]]</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>png 
+  2 </code></pre>
+<pre class="r"><code>amplitudes %&gt;%
+  select(-amplitude) %&gt;%
+  pivot_longer(min:max,
+               names_to = &quot;extreme&quot;,
+               values_to = &quot;value&quot;) %&gt;%
+  group_split(parameter) %&gt;%
+  head(1) %&gt;%
+  map(
+    ~ ggplot(data = .x,
+             aes(year, value, linetype = extreme)) +
+      geom_path(aes(col = model)) +
+      geom_smooth(method = &quot;lm&quot;, col = &quot;black&quot;, se = FALSE) +
+      labs(y = .x$parameter,
+           title = &quot;Annual max &amp; min&quot;) +
+      scale_color_discrete(name = &quot;product&quot;) +
+      facet_grid(biome ~ class, scales = &quot;free_y&quot;)
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
 <p><img src="figure/synopsis.Rmd/min_max_individual_products-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_individual_products-2">
@@ -1607,277 +1727,56 @@ jens-daniel-mueller
 </table>
 </div>
 </div>
-<pre><code>
-[[3]]</code></pre>
-<p><img src="figure/synopsis.Rmd/min_max_individual_products-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_individual_products-3">
-Past versions of min_max_individual_products-3.png
-</button>
-</p>
-<div id="fig-min_max_individual_products-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/min_max_individual_products-3.png" target="_blank">038ca13</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2023-01-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4dffbdd1e3a0f27f84b750d87aa241d629d7389e/docs/figure/synopsis.Rmd/min_max_individual_products-3.png" target="_blank">4dffbdd</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2022-12-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>pdf(&quot;output/amplitude_min_max_individual_products.pdf&quot;,
-    width = 10,
-    height = 10)
+<pre class="r"><code>pdf(&quot;output/min_max_individual_products.pdf&quot;,
+    width = 12,
+    height = 6)
 
 amplitudes %&gt;%
-  filter(parameter == &quot;fgco2_reg&quot;) %&gt;%
-  group_split(parameter) %&gt;%
-  # head(1) %&gt;%
-  map(
-    ~ ggplot(data = .x,
-             aes(year, amplitude)) +
-      geom_path(aes(col = model)) +
-      # geom_smooth(method = &quot;lm&quot;, col = &quot;black&quot;, se = FALSE) +
-      labs(y = flux_amp_title) +
-      scale_color_discrete(name = &quot;product&quot;) +
-      facet_grid(biome ~ class, scales = &quot;free_y&quot;) +
-      theme(legend.title = element_blank(),
-            axis.title.x = element_blank())
-  )</code></pre>
-<pre><code>[[1]]</code></pre>
-<pre class="r"><code>dev.off()</code></pre>
-<pre><code>png 
-  2 </code></pre>
-<pre class="r"><code>amplitudes %&gt;%
   select(-amplitude) %&gt;%
   pivot_longer(min:max,
                names_to = &quot;extreme&quot;,
                values_to = &quot;value&quot;) %&gt;%
-  group_split(parameter) %&gt;%
+  group_split(class, biome) %&gt;%
   # head(1) %&gt;%
   map(
     ~ ggplot(data = .x,
              aes(year, value, linetype = extreme)) +
       geom_path(aes(col = model)) +
-      geom_smooth(method = &quot;lm&quot;, col = &quot;black&quot;, se = FALSE) +
-      labs(y = .x$parameter,
-           title = &quot;Annual max &amp; min&quot;) +
-      scale_color_discrete(name = &quot;product&quot;) +
-      facet_grid(biome ~ class, scales = &quot;free_y&quot;)
+      # geom_smooth(method = &quot;lm&quot;, col = &quot;black&quot;, se = FALSE) +
+      labs(y = flux_int_title,
+           title = .x$biome) +
+      scale_color_brewer(palette = &quot;Paired&quot;, name = .x$class) +
+      theme(axis.title.x = element_blank())
   )</code></pre>
 <pre><code>[[1]]</code></pre>
-<p><img src="figure/synopsis.Rmd/min_max_individual_products-4.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_individual_products-4">
-Past versions of min_max_individual_products-4.png
-</button>
-</p>
-<div id="fig-min_max_individual_products-4" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/min_max_individual_products-4.png" target="_blank">038ca13</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2023-01-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4dffbdd1e3a0f27f84b750d87aa241d629d7389e/docs/figure/synopsis.Rmd/min_max_individual_products-4.png" target="_blank">4dffbdd</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2022-12-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 <pre><code>
 [[2]]</code></pre>
-<p><img src="figure/synopsis.Rmd/min_max_individual_products-5.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_individual_products-5">
-Past versions of min_max_individual_products-5.png
-</button>
-</p>
-<div id="fig-min_max_individual_products-5" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/min_max_individual_products-5.png" target="_blank">038ca13</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2023-01-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4dffbdd1e3a0f27f84b750d87aa241d629d7389e/docs/figure/synopsis.Rmd/min_max_individual_products-5.png" target="_blank">4dffbdd</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2022-12-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 <pre><code>
 [[3]]</code></pre>
-<p><img src="figure/synopsis.Rmd/min_max_individual_products-6.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_individual_products-6">
-Past versions of min_max_individual_products-6.png
-</button>
-</p>
-<div id="fig-min_max_individual_products-6" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/min_max_individual_products-6.png" target="_blank">038ca13</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2023-01-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4dffbdd1e3a0f27f84b750d87aa241d629d7389e/docs/figure/synopsis.Rmd/min_max_individual_products-6.png" target="_blank">4dffbdd</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2022-12-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>pdf(&quot;output/min_max_individual_products.pdf&quot;,
-    width = 10,
-    height = 10)
-
-amplitudes %&gt;%
-  select(-amplitude) %&gt;%
-  pivot_longer(min:max,
-               names_to = &quot;extreme&quot;,
-               values_to = &quot;value&quot;) %&gt;%
-  filter(parameter == &quot;fgco2_reg&quot;) %&gt;%
-  group_split(parameter) %&gt;%
-  # head(1) %&gt;%
-  map(
-    ~ ggplot(data = .x,
-             aes(year, value, linetype = extreme)) +
-      geom_path(aes(col = model)) +
-      # geom_smooth(method = &quot;lm&quot;, col = &quot;black&quot;, se = FALSE) +
-      labs(y = flux_int_title) +
-      scale_color_discrete(name = &quot;product&quot;) +
-      facet_grid(biome ~ class, scales = &quot;free_y&quot;) +
-      theme(legend.title = element_blank(),
-            axis.title.x = element_blank())
-  )</code></pre>
-<pre><code>[[1]]</code></pre>
+<pre><code>
+[[4]]</code></pre>
+<pre><code>
+[[5]]</code></pre>
+<pre><code>
+[[6]]</code></pre>
+<pre><code>
+[[7]]</code></pre>
+<pre><code>
+[[8]]</code></pre>
+<pre><code>
+[[9]]</code></pre>
+<pre><code>
+[[10]]</code></pre>
+<pre><code>
+[[11]]</code></pre>
+<pre><code>
+[[12]]</code></pre>
 <pre class="r"><code>dev.off()</code></pre>
 <pre><code>png 
   2 </code></pre>
-<pre class="r"><code>amplitudes &lt;-
+<pre class="r"><code>amplitudes_raw &lt;- amplitudes
+
+amplitudes &lt;-
   amplitudes %&gt;% 
   group_by(class, year, biome, parameter) %&gt;%
   summarise(min_mean = mean(min),
@@ -1903,10 +1802,10 @@ amplitudes %&gt;%
       )
     ) +
       geom_path(aes(col = class)) +
-      geom_ribbon(aes(fill = class), alpha = 0.5) +
+      geom_ribbon(aes(fill = class), alpha = 0.2) +
       labs(y = .x$parameter) +
-      scale_color_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
-      scale_fill_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
       facet_wrap(biome ~ ., scales = &quot;free_y&quot;
       ) +
       coord_cartesian(expand = 0) +
@@ -1914,157 +1813,7 @@ amplitudes %&gt;%
             axis.title.x = element_blank())
   )</code></pre>
 <pre><code>[[1]]</code></pre>
-<p><img src="figure/synopsis.Rmd/min_max_ensemble-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_ensemble-1">
-Past versions of min_max_ensemble-1.png
-</button>
-</p>
-<div id="fig-min_max_ensemble-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/min_max_ensemble-1.png" target="_blank">038ca13</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2023-01-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4dffbdd1e3a0f27f84b750d87aa241d629d7389e/docs/figure/synopsis.Rmd/min_max_ensemble-1.png" target="_blank">4dffbdd</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2022-12-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="figure/synopsis.Rmd/min_max_ensemble-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_ensemble-2">
-Past versions of min_max_ensemble-2.png
-</button>
-</p>
-<div id="fig-min_max_ensemble-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/min_max_ensemble-2.png" target="_blank">038ca13</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2023-01-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4dffbdd1e3a0f27f84b750d87aa241d629d7389e/docs/figure/synopsis.Rmd/min_max_ensemble-2.png" target="_blank">4dffbdd</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2022-12-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>
-[[3]]</code></pre>
-<p><img src="figure/synopsis.Rmd/min_max_ensemble-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_ensemble-3">
-Past versions of min_max_ensemble-3.png
-</button>
-</p>
-<div id="fig-min_max_ensemble-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/min_max_ensemble-3.png" target="_blank">038ca13</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2023-01-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4dffbdd1e3a0f27f84b750d87aa241d629d7389e/docs/figure/synopsis.Rmd/min_max_ensemble-3.png" target="_blank">4dffbdd</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2022-12-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/synopsis.Rmd/min_max_ensemble_all_GOBM-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>pdf(&quot;output/amplitude_min_max_ensemble.pdf&quot;,
     width = 8,
     height = 6)
@@ -2072,7 +1821,7 @@ jens-daniel-mueller
 amplitudes %&gt;%
   filter(parameter == &quot;fgco2_reg&quot;) %&gt;%
   group_split(parameter) %&gt;%
-  # head(1) %&gt;%
+  head(1) %&gt;%
   map(
     ~ ggplot(
       data = .x,
@@ -2084,10 +1833,10 @@ amplitudes %&gt;%
       )
     ) +
       geom_path(aes(col = class)) +
-      geom_ribbon(aes(fill = class), alpha = 0.5) +
+      geom_ribbon(aes(fill = class), alpha = 0.2) +
       labs(y = flux_amp_title) +
-      scale_color_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
-      scale_fill_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
       coord_cartesian(expand = 0) +
       facet_wrap(biome ~ .
                  , scales = &quot;free_y&quot;) +
@@ -2115,14 +1864,14 @@ amplitudes %&gt;%
       geom_ribbon(aes(year, min_mean,
                       ymin = min_mean - min_sd,
                       ymax = min_mean + min_sd,
-                      fill = class), alpha = 0.5) +
+                      fill = class), alpha = 0.2) +
       geom_ribbon(aes(year, max_mean,
                       ymin = max_mean - max_sd,
                       ymax = max_mean + max_sd,
-                      fill = class), alpha = 0.5) +
+                      fill = class), alpha = 0.2) +
       labs(y = .x$parameter) +
-      scale_color_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
-      scale_fill_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
       facet_wrap(biome ~ .
                  , scales = &quot;free_y&quot;
       ) +
@@ -2131,163 +1880,130 @@ amplitudes %&gt;%
             axis.title.x = element_blank())
   )</code></pre>
 <pre><code>[[1]]</code></pre>
-<p><img src="figure/synopsis.Rmd/min_max_ensemble-4.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_ensemble-4">
-Past versions of min_max_ensemble-4.png
-</button>
-</p>
-<div id="fig-min_max_ensemble-4" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/min_max_ensemble-4.png" target="_blank">038ca13</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2023-01-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4dffbdd1e3a0f27f84b750d87aa241d629d7389e/docs/figure/synopsis.Rmd/min_max_ensemble-4.png" target="_blank">4dffbdd</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2022-12-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/synopsis.Rmd/min_max_ensemble_all_GOBM-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pdf(&quot;output/min_max_ensemble_all_GOBMs.pdf&quot;,
+    width = 6,
+    height = 4)
+
+amplitudes %&gt;%
+  group_split(biome) %&gt;%
+  # head(1) %&gt;%
+  map(
+    ~ ggplot(
+      data = .x
+    ) +
+      geom_hline(yintercept = 0) +
+      geom_path(aes(year, min_mean,
+                    col = class,
+                    linetype = &quot;Annual mininmum&quot;)) +
+      geom_path(aes(year, max_mean,
+                    col = class,
+                    linetype = &quot;Annual maximum&quot;)) +
+      geom_ribbon(aes(year, min_mean,
+                      ymin = min_mean - min_sd,
+                      ymax = min_mean + min_sd,
+                      fill = class), alpha = 0.2) +
+      geom_ribbon(aes(year, max_mean,
+                      ymin = max_mean - max_sd,
+                      ymax = max_mean + max_sd,
+                      fill = class), alpha = 0.2) +
+      labs(y = flux_int_title) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
+      facet_wrap(biome ~ .
+                 , scales = &quot;free_y&quot;
+      ) +
+      coord_cartesian(expand = 0) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
 <pre><code>
 [[2]]</code></pre>
-<p><img src="figure/synopsis.Rmd/min_max_ensemble-5.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_ensemble-5">
-Past versions of min_max_ensemble-5.png
-</button>
-</p>
-<div id="fig-min_max_ensemble-5" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/min_max_ensemble-5.png" target="_blank">038ca13</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2023-01-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4dffbdd1e3a0f27f84b750d87aa241d629d7389e/docs/figure/synopsis.Rmd/min_max_ensemble-5.png" target="_blank">4dffbdd</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2022-12-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 <pre><code>
 [[3]]</code></pre>
-<p><img src="figure/synopsis.Rmd/min_max_ensemble-6.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-min_max_ensemble-6">
-Past versions of min_max_ensemble-6.png
-</button>
-</p>
-<div id="fig-min_max_ensemble-6" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/min_max_ensemble-6.png" target="_blank">038ca13</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2023-01-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/4dffbdd1e3a0f27f84b750d87aa241d629d7389e/docs/figure/synopsis.Rmd/min_max_ensemble-6.png" target="_blank">4dffbdd</a>
-</td>
-<td>
-jens-daniel-mueller
-</td>
-<td>
-2022-12-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>pdf(&quot;output/min_max_ensemble.pdf&quot;,
+<pre><code>
+[[4]]</code></pre>
+<pre><code>
+[[5]]</code></pre>
+<pre><code>
+[[6]]</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>png 
+  2 </code></pre>
+<pre class="r"><code>amplitudes &lt;-
+  amplitudes_raw %&gt;% 
+  filter(model != &quot;MPIOM-HAMOCC_v20220110&quot;) %&gt;% 
+  group_by(class, year, biome, parameter) %&gt;%
+  summarise(min_mean = mean(min),
+            min_sd = sd(min),
+            max_mean = mean(max),
+            max_sd = sd(max),
+            amplitude_mean = mean(amplitude),
+            amplitude_sd = sd(amplitude)) %&gt;%
+  ungroup() 
+  
+
+amplitudes %&gt;%
+  group_split(parameter) %&gt;%
+  # head(1) %&gt;%
+  map(
+    ~ ggplot(
+      data = .x,
+      aes(
+        year,
+        amplitude_mean,
+        ymin = amplitude_mean - amplitude_sd,
+        ymax = amplitude_mean + amplitude_sd
+      )
+    ) +
+      geom_path(aes(col = class)) +
+      geom_ribbon(aes(fill = class), alpha = 0.2) +
+      labs(y = .x$parameter) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
+      facet_wrap(biome ~ ., scales = &quot;free_y&quot;
+      ) +
+      coord_cartesian(expand = 0) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
+<p><img src="figure/synopsis.Rmd/min_max_ensemble_excl_MPIOM-HAMOCC-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pdf(&quot;output/amplitude_min_max_ensemble.pdf&quot;,
     width = 8,
     height = 6)
 
 amplitudes %&gt;%
-  filter(parameter == &quot;fgco2_reg&quot;) %&gt;% 
+  filter(parameter == &quot;fgco2_reg&quot;) %&gt;%
+  group_split(parameter) %&gt;%
+  head(1) %&gt;%
+  map(
+    ~ ggplot(
+      data = .x,
+      aes(
+        year,
+        amplitude_mean,
+        ymin = amplitude_mean - amplitude_sd,
+        ymax = amplitude_mean + amplitude_sd
+      )
+    ) +
+      geom_path(aes(col = class)) +
+      geom_ribbon(aes(fill = class), alpha = 0.2) +
+      labs(y = flux_amp_title) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
+      coord_cartesian(expand = 0) +
+      facet_wrap(biome ~ .
+                 , scales = &quot;free_y&quot;) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>png 
+  2 </code></pre>
+<pre class="r"><code>amplitudes %&gt;%
   group_split(parameter) %&gt;%
   # head(1) %&gt;%
   map(
@@ -2304,14 +2020,14 @@ amplitudes %&gt;%
       geom_ribbon(aes(year, min_mean,
                       ymin = min_mean - min_sd,
                       ymax = min_mean + min_sd,
-                      fill = class), alpha = 0.5) +
+                      fill = class), alpha = 0.2) +
       geom_ribbon(aes(year, max_mean,
                       ymin = max_mean - max_sd,
                       ymax = max_mean + max_sd,
-                      fill = class), alpha = 0.5) +
-      labs(y = flux_int_title) +
-      scale_color_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
-      scale_fill_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
+                      fill = class), alpha = 0.2) +
+      labs(y = .x$parameter) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
       facet_wrap(biome ~ .
                  , scales = &quot;free_y&quot;
       ) +
@@ -2320,6 +2036,54 @@ amplitudes %&gt;%
             axis.title.x = element_blank())
   )</code></pre>
 <pre><code>[[1]]</code></pre>
+<p><img src="figure/synopsis.Rmd/min_max_ensemble_excl_MPIOM-HAMOCC-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pdf(&quot;output/min_max_ensemble_excl_MPIOM-HAMOCC.pdf&quot;,
+    width = 6,
+    height = 4)
+
+amplitudes %&gt;%
+  group_split(biome) %&gt;%
+  # head(1) %&gt;%
+  map(
+    ~ ggplot(
+      data = .x
+    ) +
+      geom_hline(yintercept = 0) +
+      geom_path(aes(year, min_mean,
+                    col = class,
+                    linetype = &quot;Annual mininmum&quot;)) +
+      geom_path(aes(year, max_mean,
+                    col = class,
+                    linetype = &quot;Annual maximum&quot;)) +
+      geom_ribbon(aes(year, min_mean,
+                      ymin = min_mean - min_sd,
+                      ymax = min_mean + min_sd,
+                      fill = class), alpha = 0.2) +
+      geom_ribbon(aes(year, max_mean,
+                      ymin = max_mean - max_sd,
+                      ymax = max_mean + max_sd,
+                      fill = class), alpha = 0.2) +
+      labs(y = flux_int_title) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
+      facet_wrap(biome ~ .
+                 , scales = &quot;free_y&quot;
+      ) +
+      coord_cartesian(expand = 0) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank())
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
+<pre><code>
+[[2]]</code></pre>
+<pre><code>
+[[3]]</code></pre>
+<pre><code>
+[[4]]</code></pre>
+<pre><code>
+[[5]]</code></pre>
+<pre><code>
+[[6]]</code></pre>
 <pre class="r"><code>dev.off()</code></pre>
 <pre><code>png 
   2 </code></pre>
@@ -2424,6 +2188,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/2d83a7c0f437a4613cfc0b9954c26354005139a1/docs/figure/synopsis.Rmd/seasons_individual-2.png" target="_blank">2d83a7c</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-01-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/seasons_individual-2.png" target="_blank">038ca13</a>
@@ -2622,6 +2397,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/2d83a7c0f437a4613cfc0b9954c26354005139a1/docs/figure/synopsis.Rmd/seasons_individual-5.png" target="_blank">2d83a7c</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-01-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/seasons_individual-5.png" target="_blank">038ca13</a>
 </td>
 <td>
@@ -2748,14 +2534,14 @@ seasons %&gt;%
       geom_ribbon(aes(year, mean_JFM,
                       ymin = mean_JFM - sd_JFM,
                       ymax = mean_JFM + sd_JFM,
-                      fill = class), alpha = 0.5) +
+                      fill = class), alpha = 0.2) +
       geom_ribbon(aes(year, mean_JAS,
                       ymin = mean_JAS - sd_JAS,
                       ymax = mean_JAS + sd_JAS,
-                      fill = class), alpha = 0.5) +
+                      fill = class), alpha = 0.2) +
       labs(y = .x$parameter) +
-      scale_color_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
-      scale_fill_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
       facet_wrap(biome ~ .
                  , scales = &quot;free_y&quot;
       ) +
@@ -2838,6 +2624,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/2d83a7c0f437a4613cfc0b9954c26354005139a1/docs/figure/synopsis.Rmd/seasons_ensemble-2.png" target="_blank">2d83a7c</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-01-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/seasons_ensemble-2.png" target="_blank">038ca13</a>
@@ -2937,14 +2734,14 @@ seasons %&gt;%
       geom_ribbon(aes(year, mean_JFM,
                       ymin = mean_JFM - sd_JFM,
                       ymax = mean_JFM + sd_JFM,
-                      fill = class), alpha = 0.5) +
+                      fill = class), alpha = 0.2) +
       geom_ribbon(aes(year, mean_JAS,
                       ymin = mean_JAS - sd_JAS,
                       ymax = mean_JAS + sd_JAS,
-                      fill = class), alpha = 0.5) +
+                      fill = class), alpha = 0.2) +
       labs(y = flux_int_title) +
-      scale_color_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
-      scale_fill_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
       facet_wrap(biome ~ .
                  , scales = &quot;free_y&quot;
       ) +
@@ -2978,10 +2775,10 @@ amplitudes %&gt;%
       )
     ) +
       geom_path(aes(col = class)) +
-      geom_ribbon(aes(fill = class), alpha = 0.5) +
+      geom_ribbon(aes(fill = class), alpha = 0.2) +
       labs(y = .x$parameter) +
-      scale_color_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
-      scale_fill_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
       facet_wrap(biome ~ ., scales = &quot;free_y&quot;
       ) +
       coord_cartesian(expand = 0) +
@@ -3063,6 +2860,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/2d83a7c0f437a4613cfc0b9954c26354005139a1/docs/figure/synopsis.Rmd/seasons_ensemble-5.png" target="_blank">2d83a7c</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-01-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/038ca1375fbd04959f04b089ad1e045cde6ad816/docs/figure/synopsis.Rmd/seasons_ensemble-5.png" target="_blank">038ca13</a>
@@ -3159,10 +2967,10 @@ amplitudes %&gt;%
       )
     ) +
       geom_path(aes(col = class)) +
-      geom_ribbon(aes(fill = class), alpha = 0.5) +
+      geom_ribbon(aes(fill = class), alpha = 0.2) +
       labs(y = flux_amp_title) +
-      scale_color_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
-      scale_fill_manual(values = c(&quot;#228833&quot;, &quot;#4477AA&quot;), name = &quot;product&quot;) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
       coord_cartesian(expand = 0) +
       facet_wrap(biome ~ .
                  , scales = &quot;free_y&quot;) +
