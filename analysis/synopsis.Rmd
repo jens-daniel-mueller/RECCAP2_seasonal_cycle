@@ -212,6 +212,9 @@ biome_averages <- biome_averages %>%
 flux_amp_title <- expression("Integrated flux amplitude" ~ (Pg ~ C ~ yr ^ {-1}))
 flux_int_title <- expression("Integrated flux" ~ (Pg ~ C ~ yr ^ {-1}))
 
+pCO2_amp_title <- expression(pCO[2] ~ amplitude ~ (µatm))
+pCO2_title <- expression(pCO[2] ~ (µatm))
+
 ```
 
 ```{r seasonal_cycles_per_biome}
@@ -263,6 +266,8 @@ amplitudes <-
             max = max(value),
             amplitude = max - min) %>%
   ungroup()
+
+amplitudes_all_parameter <- amplitudes
 
 amplitudes <- amplitudes %>% 
   filter(parameter == "fgco2_reg")
@@ -348,8 +353,6 @@ dev.off()
 
 
 ```{r min_max_ensemble_all_GOBM}
-
-amplitudes_raw <- amplitudes
 
 amplitudes <-
   amplitudes %>% 
@@ -499,7 +502,7 @@ dev.off()
 ```{r min_max_ensemble_excl_MPIOM-HAMOCC}
 
 amplitudes <-
-  amplitudes_raw %>% 
+  amplitudes_all_parameter %>% 
   filter(model != "MPIOM-HAMOCC_v20220110") %>% 
   group_by(class, year, biome, parameter) %>%
   summarise(min_mean = mean(min),
@@ -509,6 +512,11 @@ amplitudes <-
             amplitude_mean = mean(amplitude),
             amplitude_sd = sd(amplitude)) %>%
   ungroup() 
+
+amplitudes_all_parameter <- amplitudes
+
+amplitudes <- amplitudes %>% 
+  filter(parameter == "fgco2_reg")
   
 
 amplitudes %>%
@@ -542,7 +550,6 @@ pdf("output/amplitude_min_max_ensemble.pdf",
     height = 6)
 
 amplitudes %>%
-  filter(parameter == "fgco2_reg") %>%
   group_split(parameter) %>%
   head(1) %>%
   map(
@@ -567,6 +574,97 @@ amplitudes %>%
       theme(legend.title = element_blank(),
             axis.title.x = element_blank(),
             panel.grid = element_blank())
+  )
+
+dev.off()
+
+pdf("output/amplitude_min_max_ensemble_pCO2.pdf",
+    width = 8,
+    height = 6)
+
+amplitudes_all_parameter %>%
+  filter(parameter == "spco2") %>% 
+  group_split(parameter) %>%
+  head(1) %>%
+  map(
+    ~ ggplot(
+      data = .x,
+      aes(
+        year,
+        amplitude_mean,
+        ymin = amplitude_mean - amplitude_sd,
+        ymax = amplitude_mean + amplitude_sd
+      )
+    ) +
+      geom_path(aes(col = class)) +
+      geom_ribbon(aes(fill = class), alpha = 0.2) +
+      labs(y = pCO2_amp_title) +
+      scale_color_manual(values = col_class, name = "product") +
+      scale_fill_manual(values = col_class, name = "product") +
+      coord_cartesian(expand = 0) +
+      scale_y_continuous(breaks = seq(0,100,10)) +
+      facet_wrap(biome ~ .
+                 , scales = "free_y") +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank(),
+            panel.grid = element_blank())
+  )
+
+dev.off()
+
+pdf("output/min_max_ensemble_pCO2.pdf",
+    width = 8,
+    height = 6)
+
+
+amplitudes_all_parameter %>%
+  filter(parameter == "spco2") %>%
+  group_split(parameter) %>%
+  head(1) %>%
+  map(
+    ~ ggplot(data = .x) +
+      geom_path(aes(
+        year, min_mean,
+        col = class,
+        linetype = "Annual mininmum"
+      )) +
+      geom_path(aes(
+        year, max_mean,
+        col = class,
+        linetype = "Annual maximum"
+      )) +
+      geom_ribbon(
+        aes(
+          year,
+          min_mean,
+          ymin = min_mean - min_sd,
+          ymax = min_mean + min_sd,
+          fill = class
+        ),
+        alpha = 0.2
+      ) +
+      geom_ribbon(
+        aes(
+          year,
+          max_mean,
+          ymin = max_mean - max_sd,
+          ymax = max_mean + max_sd,
+          fill = class
+        ),
+        alpha = 0.2
+      ) +
+      labs(y = pCO2_title) +
+      scale_y_continuous(breaks = seq(0,1000,20)) +
+      scale_color_manual(values = col_class, name = "product") +
+      scale_fill_manual(values = col_class, name = "product") +
+      facet_wrap(biome ~ .
+                 , scales = "free_y") +
+      coord_cartesian(expand = 0) +
+      theme(
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        panel.grid = element_blank()
+      )
   )
 
 dev.off()
