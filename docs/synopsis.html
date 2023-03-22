@@ -394,7 +394,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Synopsis</h1>
 <h4 class="author">Jens Daniel Müller</h4>
-<h4 class="date">21 February, 2023</h4>
+<h4 class="date">23 March, 2023</h4>
 
 </div>
 
@@ -423,7 +423,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-02-21
+<strong>Last updated:</strong> 2023-03-23
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -554,15 +554,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree0d965f9ffb9c91ebba262f0483c69ac2617fa9f1targetblank0d965f9a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree8a5244a3afe926936a920190046f71b1d8fd1f17targetblank8a5244aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/0d965f9ffb9c91ebba262f0483c69ac2617fa9f1" target="_blank">0d965f9</a>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/8a5244a3afe926936a920190046f71b1d8fd1f17" target="_blank">8a5244a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree0d965f9ffb9c91ebba262f0483c69ac2617fa9f1targetblank0d965f9a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomjensdanielmuellerRECCAP2seasonalcycletree8a5244a3afe926936a920190046f71b1d8fd1f17targetblank8a5244aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -572,7 +572,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/0d965f9ffb9c91ebba262f0483c69ac2617fa9f1" target="_blank">0d965f9</a>.
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/tree/8a5244a3afe926936a920190046f71b1d8fd1f17" target="_blank">8a5244a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -638,6 +638,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/blob/8a5244a3afe926936a920190046f71b1d8fd1f17/analysis/synopsis.Rmd" target="_blank">8a5244a</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-03-23
+</td>
+<td>
+updated plots for pCO2
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jens-daniel-mueller/RECCAP2_seasonal_cycle/87aa96112282f8d365396cd7332385d5026e7fec/docs/synopsis.html" target="_blank">87aa961</a>
+</td>
+<td>
+jens-daniel-mueller
+</td>
+<td>
+2023-02-21
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1377,7 +1411,10 @@ series</h1>
                            TRUE ~ class))
 
 flux_amp_title &lt;- expression(&quot;Integrated flux amplitude&quot; ~ (Pg ~ C ~ yr ^ {-1}))
-flux_int_title &lt;- expression(&quot;Integrated flux&quot; ~ (Pg ~ C ~ yr ^ {-1}))</code></pre>
+flux_int_title &lt;- expression(&quot;Integrated flux&quot; ~ (Pg ~ C ~ yr ^ {-1}))
+
+pCO2_amp_title &lt;- expression(pCO[2] ~ amplitude ~ (µatm))
+pCO2_title &lt;- expression(pCO[2] ~ (µatm))</code></pre>
 <pre class="r"><code>biome_averages %&gt;% 
   ggplot(aes(month, fgco2_reg, col=year, group = interaction(year, model))) +
   geom_path() +
@@ -1607,6 +1644,8 @@ jens-daniel-mueller
             amplitude = max - min) %&gt;%
   ungroup()
 
+amplitudes_all_parameter &lt;- amplitudes
+
 amplitudes &lt;- amplitudes %&gt;% 
   filter(parameter == &quot;fgco2_reg&quot;)
 
@@ -1830,9 +1869,7 @@ amplitudes %&gt;%
 <pre class="r"><code>dev.off()</code></pre>
 <pre><code>png 
   2 </code></pre>
-<pre class="r"><code>amplitudes_raw &lt;- amplitudes
-
-amplitudes &lt;-
+<pre class="r"><code>amplitudes &lt;-
   amplitudes %&gt;% 
   group_by(class, year, biome, parameter) %&gt;%
   summarise(min_mean = mean(min),
@@ -2062,7 +2099,7 @@ amplitudes %&gt;%
 <pre><code>png 
   2 </code></pre>
 <pre class="r"><code>amplitudes &lt;-
-  amplitudes_raw %&gt;% 
+  amplitudes_all_parameter %&gt;% 
   filter(model != &quot;MPIOM-HAMOCC_v20220110&quot;) %&gt;% 
   group_by(class, year, biome, parameter) %&gt;%
   summarise(min_mean = mean(min),
@@ -2072,6 +2109,11 @@ amplitudes %&gt;%
             amplitude_mean = mean(amplitude),
             amplitude_sd = sd(amplitude)) %&gt;%
   ungroup() 
+
+amplitudes_all_parameter &lt;- amplitudes
+
+amplitudes &lt;- amplitudes %&gt;% 
+  filter(parameter == &quot;fgco2_reg&quot;)
   
 
 amplitudes %&gt;%
@@ -2142,7 +2184,6 @@ jens-daniel-mueller
     height = 6)
 
 amplitudes %&gt;%
-  filter(parameter == &quot;fgco2_reg&quot;) %&gt;%
   group_split(parameter) %&gt;%
   head(1) %&gt;%
   map(
@@ -2167,6 +2208,99 @@ amplitudes %&gt;%
       theme(legend.title = element_blank(),
             axis.title.x = element_blank(),
             panel.grid = element_blank())
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>png 
+  2 </code></pre>
+<pre class="r"><code>pdf(&quot;output/amplitude_min_max_ensemble_pCO2.pdf&quot;,
+    width = 8,
+    height = 6)
+
+amplitudes_all_parameter %&gt;%
+  filter(parameter == &quot;spco2&quot;) %&gt;% 
+  group_split(parameter) %&gt;%
+  head(1) %&gt;%
+  map(
+    ~ ggplot(
+      data = .x,
+      aes(
+        year,
+        amplitude_mean,
+        ymin = amplitude_mean - amplitude_sd,
+        ymax = amplitude_mean + amplitude_sd
+      )
+    ) +
+      geom_path(aes(col = class)) +
+      geom_ribbon(aes(fill = class), alpha = 0.2) +
+      labs(y = pCO2_amp_title) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
+      coord_cartesian(expand = 0) +
+      scale_y_continuous(breaks = seq(0,100,10)) +
+      facet_wrap(biome ~ .
+                 , scales = &quot;free_y&quot;) +
+      theme(legend.title = element_blank(),
+            axis.title.x = element_blank(),
+            panel.grid = element_blank())
+  )</code></pre>
+<pre><code>[[1]]</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>png 
+  2 </code></pre>
+<pre class="r"><code>pdf(&quot;output/min_max_ensemble_pCO2.pdf&quot;,
+    width = 8,
+    height = 6)
+
+
+amplitudes_all_parameter %&gt;%
+  filter(parameter == &quot;spco2&quot;) %&gt;%
+  group_split(parameter) %&gt;%
+  head(1) %&gt;%
+  map(
+    ~ ggplot(data = .x) +
+      geom_path(aes(
+        year, min_mean,
+        col = class,
+        linetype = &quot;Annual mininmum&quot;
+      )) +
+      geom_path(aes(
+        year, max_mean,
+        col = class,
+        linetype = &quot;Annual maximum&quot;
+      )) +
+      geom_ribbon(
+        aes(
+          year,
+          min_mean,
+          ymin = min_mean - min_sd,
+          ymax = min_mean + min_sd,
+          fill = class
+        ),
+        alpha = 0.2
+      ) +
+      geom_ribbon(
+        aes(
+          year,
+          max_mean,
+          ymin = max_mean - max_sd,
+          ymax = max_mean + max_sd,
+          fill = class
+        ),
+        alpha = 0.2
+      ) +
+      labs(y = pCO2_title) +
+      scale_y_continuous(breaks = seq(0,1000,20)) +
+      scale_color_manual(values = col_class, name = &quot;product&quot;) +
+      scale_fill_manual(values = col_class, name = &quot;product&quot;) +
+      facet_wrap(biome ~ .
+                 , scales = &quot;free_y&quot;) +
+      coord_cartesian(expand = 0) +
+      theme(
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        panel.grid = element_blank()
+      )
   )</code></pre>
 <pre><code>[[1]]</code></pre>
 <pre class="r"><code>dev.off()</code></pre>
